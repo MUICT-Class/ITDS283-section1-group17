@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/login_page.dart';
+import 'package:projectphrase2/pages/usermanage_page.dart';
 import 'pages/home_page.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Album CRUD Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: LoginPage(),
+      home: UsermanagePage(),
       routes: {},
     );
   }
