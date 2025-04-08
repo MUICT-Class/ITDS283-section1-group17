@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/login_page.dart';
-import 'pages/home_page.dart';
+//import 'pages/home_page.dart';
 
-void main() {
+//import firecase
+import 'package:firebase_core/firebase_core.dart';
+import 'package:projectphrase2/pages/register_page.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // ต้องมาก่อน
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('✅ Firebase Initialized Successfully');
+  } catch (e) {
+    print('❌ Firebase Initialization Error: $e');
+  }
+
   runApp(MyApp());
 }
 

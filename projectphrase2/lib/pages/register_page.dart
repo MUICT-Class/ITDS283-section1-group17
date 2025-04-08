@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/pages/register_page.dart';
+import 'package:projectphrase2/pages/login_page.dart';
 import 'package:projectphrase2/widgets/fieldinput.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
-  String? errorMessage;
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController EmailController = TextEditingController();
+  final TextEditingController PasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
@@ -30,38 +27,31 @@ class _LoginPageState extends State<LoginPage> {
                 height: 100,
               ),
               const Text(
-                "Login",
+                "Register",
                 style: TextStyle(fontSize: 56, fontWeight: FontWeight.w500),
               ),
               const Text(
-                "login to your account",
+                "create your account",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              const SizedBox(height: 60),
-              TextFieldInLog(
-                  textEditingController: emailController,
-                  hintText: "username",
-                  icon: Icons.person),
+              const SizedBox(height: 40),
+              TextFieldInSign(
+                  textEditingController: EmailController, hintText: 'Username'),
               const SizedBox(height: 15),
-              TextFieldInLog(
-                  textEditingController: emailController,
-                  hintText: "password",
-                  icon: Icons.key),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Forgot password?",
-                    style:
-                        TextStyle(color: const Color.fromARGB(255, 0, 127, 85)),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+              TextFieldInSign(
+                  textEditingController: EmailController, hintText: 'Email'),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                  textEditingController: PasswordController,
+                  hintText: 'Password'),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                  textEditingController: PasswordController,
+                  hintText: 'Confirm Password'),
+              const SizedBox(height: 60),
               SizedBox(
                 width: double.infinity,
-                height: 60,
+                height: 70,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
@@ -70,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(360)),
                   ),
                   child: const Text(
-                    "Login",
+                    "Register",
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
@@ -79,17 +69,14 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("New user? "),
+                  const Text("Already have an account?"),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterPage()),
-                      );
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
                     },
                     child: const Text(
-                      "Sign up",
+                      "Login",
                       style: TextStyle(
                           color: const Color.fromARGB(255, 0, 127, 85)),
                     ),
