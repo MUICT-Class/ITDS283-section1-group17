@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/login_page.dart';
-<<<<<<< HEAD
 //import 'pages/home_page.dart';
 
 //import firecase
@@ -18,10 +17,6 @@ void main() async {
   } catch (e) {
     print('❌ Firebase Initialization Error: $e');
   }
-=======
-import 'package:projectphrase2/pages/usermanage_page.dart';
-import 'pages/home_page.dart';
->>>>>>> d93ff5068b8703caef505b1330669134df08b4f5
 
   runApp(MyApp());
 }
