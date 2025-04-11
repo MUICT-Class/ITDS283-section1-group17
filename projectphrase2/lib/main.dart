@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
-<<<<<<< HEAD
+import 'package:projectphrase2/pages/loading.dart';
 //import 'pages/home_page.dart';
+//import 'package:projectphrase2/pages/register_page.dart';
 
-//import firecase
+//import firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:projectphrase2/pages/register_page.dart';
+import 'package:projectphrase2/services/auth_layout.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,10 +21,6 @@ void main() async {
   } catch (e) {
     print('❌ Firebase Initialization Error: $e');
   }
-=======
-import 'package:projectphrase2/pages/usermanage_page.dart';
-import 'pages/home_page.dart';
->>>>>>> d93ff5068b8703caef505b1330669134df08b4f5
 
   runApp(MyApp());
 }
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Album CRUD Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: AuthLayout(),
       // routes: {},
     );
   }

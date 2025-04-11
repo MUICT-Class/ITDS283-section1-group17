@@ -1,19 +1,41 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/register_page.dart';
+import 'package:projectphrase2/services/auth_service.dart';
 import 'package:projectphrase2/widgets/fieldinput.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({
+    super.key,
+  });
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
-  String? errorMessage;
+  TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerPassword = TextEditingController();
+  String errorMessage = '';
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controllerEmail.dispose();
+    controllerPassword.dispose();
+    super.dispose();
+  }
+
+  void signIn() async {
+    try {
+      await authService.value.signIn(
+          email: controllerEmail.text, password: controllerPassword.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message ?? 'This is not working';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +61,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 60),
               TextFieldInLog(
-                  textEditingController: emailController,
+                  textEditingController: controllerEmail,
                   hintText: "username",
                   icon: Icons.person),
               const SizedBox(height: 15),
               TextFieldInLog(
-                  textEditingController: emailController,
+                  textEditingController: controllerPassword,
                   hintText: "password",
                   icon: Icons.key),
               Align(
@@ -53,17 +75,27 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {},
                   child: const Text(
                     "Forgot password?",
-                    style:
-                        TextStyle(color: const Color.fromARGB(255, 0, 127, 85)),
+                    style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(color: Colors.redAccent),
+                  )),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    signIn();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(178, 0, 127, 85),
                     shape: RoundedRectangleBorder(
@@ -90,8 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: const Text(
                       "Sign up",
-                      style: TextStyle(
-                          color: const Color.fromARGB(255, 0, 127, 85)),
+                      style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
                     ),
                   ),
                 ],

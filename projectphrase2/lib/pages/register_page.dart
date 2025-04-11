@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/login_page.dart';
+import 'package:projectphrase2/services/auth_service.dart';
 import 'package:projectphrase2/widgets/fieldinput.dart';
+import '../services/auth_layout.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,8 +13,36 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController EmailController = TextEditingController();
-  final TextEditingController PasswordController = TextEditingController();
+  final TextEditingController controllerEmail = TextEditingController();
+  final TextEditingController controllerPassword = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  String errorMessage = '';
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controllerEmail.dispose();
+    controllerPassword.dispose();
+    super.dispose();
+  }
+
+  void register() async {
+    try {
+      await authService.value.createAccount(
+        email: controllerEmail.text,
+        password: controllerPassword.text,
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthLayout()),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message ?? 'There is an error';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,26 +65,30 @@ class _RegisterPageState extends State<RegisterPage> {
                 "create your account",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              const SizedBox(height: 40),
-              TextFieldInSign(
-                  textEditingController: EmailController, hintText: 'Username'),
-              const SizedBox(height: 15),
-              TextFieldInSign(
-                  textEditingController: EmailController, hintText: 'Email'),
-              const SizedBox(height: 15),
-              TextFieldInSign(
-                  textEditingController: PasswordController,
-                  hintText: 'Password'),
-              const SizedBox(height: 15),
-              TextFieldInSign(
-                  textEditingController: PasswordController,
-                  hintText: 'Confirm Password'),
               const SizedBox(height: 60),
+              TextFieldInSign(
+                  textEditingController: controllerEmail, hintText: 'Email'),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                  textEditingController: controllerPassword,
+                  hintText: 'Password'),
+              const SizedBox(
+                height: 15,
+              ),
+              Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(color: Colors.redAccent),
+                  )),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 height: 70,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    register();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(178, 0, 127, 85),
                     shape: RoundedRectangleBorder(
@@ -77,8 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     child: const Text(
                       "Login",
-                      style: TextStyle(
-                          color: const Color.fromARGB(255, 0, 127, 85)),
+                      style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
                     ),
                   ),
                 ],
