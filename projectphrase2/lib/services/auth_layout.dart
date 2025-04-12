@@ -21,11 +21,12 @@ class AuthLayout extends StatelessWidget {
         return StreamBuilder(
             stream: authService.authStateChanges,
             builder: (context, snapshot) {
+              print("ConnectionState: ${snapshot.connectionState}");
               Widget widget;
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                widget = Loading();
+              if (snapshot.connectionState != ConnectionState.active) {
+                widget = const Loading();
               } else if (snapshot.hasData) {
-                widget = HomePage();
+                widget = const HomePage();
               } else {
                 widget = pageIfNotConnected ?? const LoginPage();
               }

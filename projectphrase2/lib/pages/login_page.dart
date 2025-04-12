@@ -30,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await authService.value.signIn(
           email: controllerEmail.text, password: controllerPassword.text);
+      setState(() {
+        errorMessage = '';
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message ?? 'This is not working';
@@ -61,14 +64,18 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 60),
               TextFieldInLog(
-                  textEditingController: controllerEmail,
-                  hintText: "username",
-                  icon: Icons.person),
+                textEditingController: controllerEmail,
+                hintText: "email",
+                icon: Icons.person,
+                obscureText: false,
+              ),
               const SizedBox(height: 15),
               TextFieldInLog(
-                  textEditingController: controllerPassword,
-                  hintText: "password",
-                  icon: Icons.key),
+                textEditingController: controllerPassword,
+                hintText: "password",
+                icon: Icons.key,
+                obscureText: true,
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton(

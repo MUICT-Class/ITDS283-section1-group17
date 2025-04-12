@@ -15,7 +15,6 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
-  final formKey = GlobalKey<FormState>();
   String errorMessage = '';
 
   @override
@@ -37,6 +36,9 @@ class _RegisterPageState extends State<RegisterPage> {
         MaterialPageRoute(builder: (context) => const AuthLayout()),
         (route) => false,
       );
+      setState(() {
+        errorMessage = '';
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message ?? 'There is an error';
