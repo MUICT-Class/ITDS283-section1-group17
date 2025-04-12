@@ -18,27 +18,52 @@ class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
       currentIndex: currentIndex,
       onTap: onTap,
       showSelectedLabels: false,
       showUnselectedLabels: false,
       type: BottomNavigationBarType.fixed,
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.house_rounded), label: ''),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite_border_outlined), label: ''),
         BottomNavigationBarItem(
-          icon: CircleAvatar(
-            radius: 30,
-            backgroundColor: Color(0xFF4DA688),
-            child: Icon(Icons.add, color: Colors.white),
+          icon: Icon(
+            Icons.home_outlined,
+            size: 33,
           ),
           label: '',
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline_rounded), label: ''),
-        BottomNavigationBarItem(icon: Icon(Icons.person_2_outlined,
-        color: Color(0xFF389B72),), label: ''),
+        BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite_border_outlined,
+              size: 30,
+            ),
+            label: ''),
+        BottomNavigationBarItem(
+          icon: CircleAvatar(
+            radius: 33,
+            backgroundColor: Color(0xFF4DA688),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+          label: '',
+        ),
+        BottomNavigationBarItem(
+            icon: Icon(
+              Icons.chat_bubble_outline_rounded,
+              size: 30,
+            ),
+            label: ''),
+        BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_2_outlined,
+              size: 30,
+            ),
+            label: ''),
       ],
     );
   }
 }
-

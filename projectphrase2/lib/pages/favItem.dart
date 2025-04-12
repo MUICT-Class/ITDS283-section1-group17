@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
-class FavItem extends StatelessWidget{
+class FavItem extends StatelessWidget {
   const FavItem({super.key});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Favorite Item"),
-        leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new_outlined))
+        backgroundColor: Colors.white,
+        title: Text("Favorite Items"),
       ),
-      // body: Text("this is Favorite Item Page"),
     );
   }
-
 }
