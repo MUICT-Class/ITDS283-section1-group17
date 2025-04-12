@@ -13,8 +13,8 @@ class ProductDisplay extends StatelessWidget {
           Stack(
             children: [
               SizedBox(
-                width: 190,
-                height: 190,
+                width: 180,
+                height: 180,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.asset(

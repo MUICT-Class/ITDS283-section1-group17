@@ -28,8 +28,8 @@ class Navbar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.home,
-            size: 35,
+            Icons.home_outlined,
+            size: 33,
           ),
           label: '',
         ),
@@ -41,7 +41,7 @@ class Navbar extends StatelessWidget {
             label: ''),
         BottomNavigationBarItem(
           icon: CircleAvatar(
-            radius: 35,
+            radius: 33,
             backgroundColor: Color(0xFF4DA688),
             child: Icon(
               Icons.add,
