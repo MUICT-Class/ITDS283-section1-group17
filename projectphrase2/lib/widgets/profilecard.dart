@@ -55,7 +55,7 @@ class Profilecard extends StatelessWidget {
             ),
             Row(
               children: [
-                Text("Status    gi"),
+                Text("Status    "),
                 Text(user.status,
                 style: TextStyle(color:Color(0xFF4DA688)),)
               ],

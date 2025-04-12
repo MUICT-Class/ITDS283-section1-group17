@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/login_page.dart';
-//import 'pages/home_page.dart';
+import 'package:projectphrase2/pages/usermanage_page.dart';
+import 'pages/home_page.dart';
+import 'package:projectphrase2/pages/usermanage_page.dart';
+import 'package:projectphrase2/pages/addItem.dart';
+import 'package:projectphrase2/pages/chat.dart';
+import 'package:projectphrase2/pages/favItem.dart';
+import 'package:projectphrase2/widgets/navbar.dart';
 
 //import firecase
 import 'package:firebase_core/firebase_core.dart';
@@ -29,8 +35,45 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Album CRUD Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: UsermanagePage()
       // routes: {},
     );
   }
 }
+
+class MainPageWithNavbar extends StatefulWidget {
+  const MainPageWithNavbar({super.key});
+
+  @override
+  State<MainPageWithNavbar> createState() => _MainPageWithNavbarState();
+}
+
+class _MainPageWithNavbarState extends State<MainPageWithNavbar> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = const [
+    HomePage(),
+    FavItem(),
+    Additem(),
+    Chat(),
+    UsermanagePage(),
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: Navbar(
+        currentIndex: _selectedIndex,
+        onTap: _onTabTapped,
+      ),
+    );
+  }
+}
+
