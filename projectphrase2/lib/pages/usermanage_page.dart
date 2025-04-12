@@ -5,36 +5,18 @@ import 'package:projectphrase2/pages/favItem.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
 import 'package:projectphrase2/pages/product.dart';
+import 'package:projectphrase2/services/auth_service.dart';
 import 'package:projectphrase2/widgets/navbar.dart';
 import 'package:projectphrase2/widgets/profilecard.dart';
 import 'package:projectphrase2/models/user_models.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-<<<<<<< HEAD
-=======
 // void main(){
 //   runApp(app)
 // }
->>>>>>> origin/usermanage
+
 class UsermanagePage extends StatelessWidget {
   const UsermanagePage({super.key});
-
-  void onTap(int index, BuildContext context) {
-    if (index == 0) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomePage()));
-    } else if (index == 1) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => FavItem()));
-    } else if (index == 2) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => Additem()));
-    } else if (index == 3) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => Chat()));
-    } else if (index == 4) {
-      // Stay here
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +26,6 @@ class UsermanagePage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: Icon(Icons.arrow_back_ios),
-        ),
-        bottomNavigationBar: Navbar(
-          currentIndex: 4,
-          onTap: (index) => onTap(index, context),
         ),
         body: Container(
             color: Color(0xFF389B72),
@@ -56,14 +33,14 @@ class UsermanagePage extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 1500,
+                    height: 900,
                     child: Stack(
                       children: [
                         Positioned(
                             top: 200,
                             left: 0,
                             right: 0,
-                            bottom: 400,
+                            bottom: 0,
                             child: Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -76,7 +53,19 @@ class UsermanagePage extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
-                                  Profilecard(user: demoUser),
+                                  Profilecard(
+                                    user: UserModels(
+                                      name: FirebaseAuth.instance.currentUser
+                                              ?.displayName ??
+                                          'No name',
+                                      email: FirebaseAuth
+                                              .instance.currentUser?.email ??
+                                          'No email',
+                                      mobile: FirebaseAuth.instance.currentUser
+                                              ?.phoneNumber ??
+                                          '',
+                                    ),
+                                  ),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -87,7 +76,10 @@ class UsermanagePage extends StatelessWidget {
                                       color: Color(0xFF007F55),
                                     ),
                                     onTap: () {
-                                      Navigator.push(context,MaterialPageRoute(builder: (context) => FavItem()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => FavItem()));
                                     },
                                   ),
                                   SizedBox(
@@ -100,7 +92,10 @@ class UsermanagePage extends StatelessWidget {
                                       color: Color(0xFF007F55),
                                     ),
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Product()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Product()));
                                     },
                                   ),
                                   SizedBox(
@@ -111,21 +106,30 @@ class UsermanagePage extends StatelessWidget {
                                     icon: Icon(Icons.chat_bubble_outline,
                                         color: Color(0xFF007F55)),
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Chat()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Chat()));
                                     },
                                   ),
                                   SizedBox(
                                     height: 20,
                                   ),
                                   Itembar(
-                                      text: "Sign out",
-                                      color: Colors.red,
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute( builder: (context) =>LoginPage()));
-                                      },
-                                      none: true,)
+                                    text: "Sign out",
+                                    color: Colors.red,
+                                    onTap: () async {
+                                      await AuthService().signOut();
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                        (route) =>
+                                            false, // ลบ route เก่าทิ้งทั้งหมด
+                                      );
+                                    },
+                                    none: true,
+                                  )
                                 ],
                               ),
                             )),
@@ -168,7 +172,8 @@ class Itembar extends StatelessWidget {
       required this.text,
       this.color,
       this.icon,
-      required this.onTap, this.none});
+      required this.onTap,
+      this.none});
 
   @override
   Widget build(BuildContext context) {
