@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Album CRUD Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: AuthLayout(),
       // routes: {},
     );
   }

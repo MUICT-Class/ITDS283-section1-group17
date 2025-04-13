@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/pages/product.dart';
 
 class Additem extends StatefulWidget {
   const Additem({super.key});
@@ -55,6 +56,16 @@ class _AdditemState extends State<Additem> {
     print("Price: $price");
     print("Description: $description");
 
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text("Item added successfully!"),
+      backgroundColor: Colors.grey[700],
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: EdgeInsets.all(16),
+    ),
+  );
+
     // Clear all fields
     nameController.clear();
     priceController.clear();
@@ -64,7 +75,8 @@ class _AdditemState extends State<Additem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add Product")),
+      appBar: AppBar(title: Text("Add Product"),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -174,3 +186,4 @@ class InputBox extends StatelessWidget {
     );
   }
 }
+

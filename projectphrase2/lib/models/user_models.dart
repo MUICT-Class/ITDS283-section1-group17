@@ -1,17 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 class UserModels {
   final String name;
   final String email;
-  final String mobile;
 
   UserModels({
     required this.name,
     required this.email,
-    required this.mobile,
   });
 }
 
 final demoUser = UserModels(
-  name: "Thanakrit Smith",
-  email: "firstname.sur@student.mahidol.ac.th",
-  mobile: "xxx-xxx-xxxx",
+  name: FirebaseAuth.instance.currentUser?.displayName ?? 'Thanakrit Smith',
+  email: FirebaseAuth.instance.currentUser?.email ?? 'firstname.las@student.mahidol.ac.th',
 );

@@ -50,7 +50,7 @@ class ProductDisplay extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 5),
           const Text(
             '\$360.00',
             style: TextStyle(

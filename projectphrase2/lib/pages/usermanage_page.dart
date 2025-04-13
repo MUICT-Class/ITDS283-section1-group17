@@ -54,17 +54,7 @@ class UsermanagePage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Profilecard(
-                                    user: UserModels(
-                                      name: FirebaseAuth.instance.currentUser
-                                              ?.displayName ??
-                                          'No name',
-                                      email: FirebaseAuth
-                                              .instance.currentUser?.email ??
-                                          'No email',
-                                      mobile: FirebaseAuth.instance.currentUser
-                                              ?.phoneNumber ??
-                                          '',
-                                    ),
+                                    user: demoUser,
                                   ),
                                   SizedBox(
                                     height: 20,

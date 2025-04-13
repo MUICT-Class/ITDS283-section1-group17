@@ -40,19 +40,13 @@ class Profilecard extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Email   ${user.email ?? FirebaseAuth.instance.currentUser?.email ?? 'N/A'}",
+                  "Email   ${user.email}",
                   style: TextStyle(
                     fontSize: 13,
                   ),
                 ),
                 SizedBox(
                   height: 7,
-                ),
-                Text(
-                  "Mobile   ${user.mobile}",
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
                 ),
               ],
             )));
