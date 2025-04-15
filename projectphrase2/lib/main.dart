@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/models/product.dart';
+import 'package:projectphrase2/pages/displayproduct.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
 import 'package:projectphrase2/pages/loading.dart';
 
 import 'package:projectphrase2/pages/usermanage_page.dart';
+import 'package:projectphrase2/widgets/product_display.dart';
 import 'pages/home_page.dart';
 import 'package:projectphrase2/pages/usermanage_page.dart';
 import 'package:projectphrase2/pages/addItem.dart';
@@ -40,6 +43,7 @@ class MyApp extends StatelessWidget {
       title: 'Album CRUD Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: AuthLayout(),
+      // home: Displayproduct(product: demoProduct),
       // routes: {},
     );
   }
