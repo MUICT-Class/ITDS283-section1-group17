@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/models/user_model.dart';
 import 'package:projectphrase2/pages/login_page.dart';
 import 'package:projectphrase2/services/auth_service.dart';
 import 'package:projectphrase2/widgets/fieldinput.dart';
 import '../services/auth_layout.dart';
+import 'package:projectphrase2/services/database_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,6 +18,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
+  final TextEditingController controllerUsername = TextEditingController();
+  final TextEditingController controllerMobile = TextEditingController();
   String errorMessage = '';
 
   @override
@@ -22,15 +27,68 @@ class _RegisterPageState extends State<RegisterPage> {
     // TODO: implement dispose
     controllerEmail.dispose();
     controllerPassword.dispose();
+    controllerUsername.dispose();
+    controllerMobile.dispose();
     super.dispose();
+  }
+
+  String? validatePhoneNumber(String value) {
+    //Regular Expression for check mobile number
+    final phoneRegExp = RegExp(r'^[0-9]{10}$');
+    if (!phoneRegExp.hasMatch(value)) {
+      return 'Phone number must be 10 digits';
+    }
+    return null;
+  }
+
+  String? validateMuictEmail(String value) {
+    final muictEmailRegExp =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@student\.mahidol\.edu$');
+    if (!muictEmailRegExp.hasMatch(value)) {
+      return 'Email must be a valid student.mahidol.edu address';
+    }
+    return null;
   }
 
   void register() async {
     try {
-      await authService.value.createAccount(
-        email: controllerEmail.text,
+      final email = controllerEmail.text;
+      String? emailValidation = validateMuictEmail(email);
+      if (emailValidation != null) {
+        setState(() {
+          errorMessage = emailValidation;
+        });
+        return;
+      }
+
+      final phoneNumber = controllerMobile.text;
+
+      // check mobile
+      String? phoneValidation = validatePhoneNumber(phoneNumber);
+      if (phoneValidation != null) {
+        setState(() {
+          errorMessage = phoneValidation;
+        });
+        return;
+      }
+
+      final res = await authService.value.createAccount(
+        email: email,
         password: controllerPassword.text,
       );
+      final uid = res.user?.uid;
+
+      // store user data to Firestore
+      if (uid != null) {
+        final user = UserModel(
+          uid: uid,
+          email: email,
+          name: controllerUsername.text,
+          mobile: controllerMobile.text,
+        );
+
+        await DatabaseService().saveUser(user.toMap());
+      }
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AuthLayout()),
@@ -69,7 +127,17 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 60),
               TextFieldInSign(
-                  textEditingController: controllerEmail, hintText: 'Email'),
+                textEditingController: controllerUsername,
+                hintText: 'Username',
+              ),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                textEditingController: controllerEmail,
+                hintText: 'Email',
+              ),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                  textEditingController: controllerMobile, hintText: 'Mobile'),
               const SizedBox(height: 15),
               TextFieldInSign(
                   textEditingController: controllerPassword,

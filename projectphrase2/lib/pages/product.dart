@@ -3,11 +3,13 @@ import 'package:projectphrase2/models/product.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/widgets/productItem.dart';
+import 'package:projectphrase2/models/product.dart';
 
 final List<ProductModel> products = [
   demoProduct,
   demoProduct,
   demoProduct,
+
 ];
 
 class Product extends StatelessWidget {

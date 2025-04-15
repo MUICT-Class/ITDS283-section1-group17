@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/register_page.dart';
+import 'package:projectphrase2/services/auth_layout.dart';
 import 'package:projectphrase2/services/auth_service.dart';
 import 'package:projectphrase2/widgets/fieldinput.dart';
 
@@ -33,6 +34,11 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         errorMessage = '';
       });
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthLayout()),
+        (route) => false,
+      );
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message ?? 'This is not working';

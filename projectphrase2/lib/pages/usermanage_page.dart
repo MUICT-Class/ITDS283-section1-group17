@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/models/user_model.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/chat.dart';
 import 'package:projectphrase2/pages/favItem.dart';
@@ -6,17 +7,35 @@ import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
 import 'package:projectphrase2/pages/product.dart';
 import 'package:projectphrase2/services/auth_service.dart';
+import 'package:projectphrase2/services/database_service.dart';
 import 'package:projectphrase2/widgets/navbar.dart';
 import 'package:projectphrase2/widgets/profilecard.dart';
-import 'package:projectphrase2/models/user_models.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-// void main(){
-//   runApp(app)
-// }
-
-class UsermanagePage extends StatelessWidget {
+class UsermanagePage extends StatefulWidget {
   const UsermanagePage({super.key});
+
+  @override
+  State<UsermanagePage> createState() => _UsermanagePageState();
+}
+
+class _UsermanagePageState extends State<UsermanagePage> {
+  UserModel? user;
+
+  @override
+  void initState() {
+    super.initState();
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      DatabaseService().loadUser(uid).then((fetchedUser) {
+        if (fetchedUser != null) {
+          setState(() {
+            user = UserModel.fromMap(fetchedUser);
+          });
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +73,16 @@ class UsermanagePage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Profilecard(
-                                    user: demoUser,
+                                    user: user ??
+                                        UserModel(
+                                          name: 'No name',
+                                          email: FirebaseAuth.instance
+                                                  .currentUser?.email ??
+                                              'No email',
+                                          mobile: FirebaseAuth.instance
+                                                  .currentUser?.phoneNumber ??
+                                              '',
+                                        ),
                                   ),
                                   SizedBox(
                                     height: 20,
