@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/user_models.dart';
+import 'package:projectphrase2/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Profilecard extends StatelessWidget {
-  final UserModels user;
+  final UserModel user;
 
   const Profilecard({required this.user, super.key});
 
@@ -29,7 +29,7 @@ class Profilecard extends StatelessWidget {
                         )),
                     Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Text(user.name,
+                        child: Text(user.name ?? 'No name',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 17,

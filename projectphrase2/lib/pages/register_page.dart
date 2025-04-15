@@ -19,6 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
   final TextEditingController controllerUsername = TextEditingController();
+  final TextEditingController controllerMobile = TextEditingController();
   String errorMessage = '';
 
   @override
@@ -27,24 +28,48 @@ class _RegisterPageState extends State<RegisterPage> {
     controllerEmail.dispose();
     controllerPassword.dispose();
     controllerUsername.dispose();
+    controllerMobile.dispose();
     super.dispose();
+  }
+
+  String? validatePhoneNumber(String value) {
+    //Regular Expression for check mobile number
+    final phoneRegExp = RegExp(r'^[0-9]{10}$');
+    if (!phoneRegExp.hasMatch(value)) {
+      return 'Phone number must be 10 digits';
+    }
+    return null;
   }
 
   void register() async {
     try {
+      final phoneNumber = controllerMobile.text;
+
+      // check mobile
+      String? phoneValidation = validatePhoneNumber(phoneNumber);
+      if (phoneValidation != null) {
+        setState(() {
+          errorMessage = phoneValidation;
+        });
+        return;
+      }
+
       final res = await authService.value.createAccount(
         email: controllerEmail.text,
         password: controllerPassword.text,
       );
       final uid = res.user?.uid;
 
-      // สร้างข้อมูล user ไปเก็บใน Firestore
+      // store user data to Firestore
       if (uid != null) {
-        await FirebaseFirestore.instance.collection('users').doc(uid).set({
-          'email': controllerEmail.text,
-          'username': controllerUsername.text,
-          'createdAt': FieldValue.serverTimestamp(),
-        });
+        final user = UserModel(
+          uid: uid,
+          email: controllerEmail.text,
+          name: controllerUsername.text,
+          mobile: controllerMobile.text,
+        );
+
+        await DatabaseService().saveUser(user.toMap());
       }
       Navigator.pushAndRemoveUntil(
         context,
@@ -84,7 +109,17 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 60),
               TextFieldInSign(
-                  textEditingController: controllerEmail, hintText: 'Email'),
+                textEditingController: controllerUsername,
+                hintText: 'Username',
+              ),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                textEditingController: controllerEmail,
+                hintText: 'Email',
+              ),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                  textEditingController: controllerMobile, hintText: 'Mobile'),
               const SizedBox(height: 15),
               TextFieldInSign(
                   textEditingController: controllerPassword,
