@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/models/user_model.dart';
 import 'package:projectphrase2/pages/login_page.dart';
 import 'package:projectphrase2/services/auth_service.dart';
 import 'package:projectphrase2/widgets/fieldinput.dart';
 import '../services/auth_layout.dart';
+import 'package:projectphrase2/services/database_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,6 +18,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
+  final TextEditingController controllerUsername = TextEditingController();
   String errorMessage = '';
 
   @override
@@ -22,15 +26,26 @@ class _RegisterPageState extends State<RegisterPage> {
     // TODO: implement dispose
     controllerEmail.dispose();
     controllerPassword.dispose();
+    controllerUsername.dispose();
     super.dispose();
   }
 
   void register() async {
     try {
-      await authService.value.createAccount(
+      final res = await authService.value.createAccount(
         email: controllerEmail.text,
         password: controllerPassword.text,
       );
+      final uid = res.user?.uid;
+
+      // สร้างข้อมูล user ไปเก็บใน Firestore
+      if (uid != null) {
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          'email': controllerEmail.text,
+          'username': controllerUsername.text,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AuthLayout()),
