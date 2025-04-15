@@ -41,8 +41,26 @@ class _RegisterPageState extends State<RegisterPage> {
     return null;
   }
 
+  String? validateMuictEmail(String value) {
+    final muictEmailRegExp =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@student\.mahidol\.edu$');
+    if (!muictEmailRegExp.hasMatch(value)) {
+      return 'Email must be a valid student.mahidol.edu address';
+    }
+    return null;
+  }
+
   void register() async {
     try {
+      final email = controllerEmail.text;
+      String? emailValidation = validateMuictEmail(email);
+      if (emailValidation != null) {
+        setState(() {
+          errorMessage = emailValidation;
+        });
+        return;
+      }
+
       final phoneNumber = controllerMobile.text;
 
       // check mobile
@@ -55,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
       final res = await authService.value.createAccount(
-        email: controllerEmail.text,
+        email: email,
         password: controllerPassword.text,
       );
       final uid = res.user?.uid;
@@ -64,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (uid != null) {
         final user = UserModel(
           uid: uid,
-          email: controllerEmail.text,
+          email: email,
           name: controllerUsername.text,
           mobile: controllerMobile.text,
         );
