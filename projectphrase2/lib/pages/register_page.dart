@@ -41,25 +41,25 @@ class _RegisterPageState extends State<RegisterPage> {
     return null;
   }
 
-  String? validateMuictEmail(String value) {
-    final muictEmailRegExp =
-        RegExp(r'^[a-zA-Z0-9._%+-]+@student\.mahidol\.edu$');
-    if (!muictEmailRegExp.hasMatch(value)) {
-      return 'Email must be a valid student.mahidol.edu address';
-    }
-    return null;
-  }
+  // String? validateMuictEmail(String value) {
+  //   final muictEmailRegExp =
+  //       RegExp(r'^[a-zA-Z0-9._%+-]+@student\.mahidol\.edu$');
+  //   if (!muictEmailRegExp.hasMatch(value)) {
+  //     return 'Email must be a valid student.mahidol.edu address';
+  //   }
+  //   return null;
+  // }
 
   void register() async {
     try {
-      final email = controllerEmail.text;
-      String? emailValidation = validateMuictEmail(email);
-      if (emailValidation != null) {
-        setState(() {
-          errorMessage = emailValidation;
-        });
-        return;
-      }
+      // final email = controllerEmail.text;
+      // String? emailValidation = validateMuictEmail(email);
+      // if (emailValidation != null) {
+      //   setState(() {
+      //     errorMessage = emailValidation;
+      //   });
+      //   return;
+      // }
 
       final phoneNumber = controllerMobile.text;
 
@@ -73,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
       final res = await authService.value.createAccount(
-        email: email,
+        email: controllerEmail.text,
         password: controllerPassword.text,
       );
       final uid = res.user?.uid;
@@ -82,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (uid != null) {
         final user = UserModel(
           uid: uid,
-          email: email,
+          email: controllerEmail.text,
           name: controllerUsername.text,
           mobile: controllerMobile.text,
         );
@@ -181,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     },
                     child: const Text(
-                      "Login",
+                      " Login",
                       style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
                     ),
                   ),
