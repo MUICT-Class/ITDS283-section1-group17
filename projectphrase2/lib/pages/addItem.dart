@@ -159,7 +159,7 @@ class InputBox extends StatelessWidget {
   final String inputname;
   final String labelname;
   final TextEditingController controller;
-  final String? errorText; // 👈 new
+  final String? errorText; // 
 
   const InputBox({
     super.key,
