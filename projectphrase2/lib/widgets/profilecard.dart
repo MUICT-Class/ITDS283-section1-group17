@@ -46,6 +46,15 @@ class Profilecard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Mobile   ${user.mobile}",
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+                SizedBox(
                   height: 7,
                 ),
               ],
