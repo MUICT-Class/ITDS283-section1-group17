@@ -115,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 100,
+                height: 80,
               ),
               const Text(
                 "Register",
@@ -125,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "create your account",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              const SizedBox(height: 60),
+              const SizedBox(height: 50),
               TextFieldInSign(
                 textEditingController: controllerUsername,
                 hintText: 'Username',
@@ -151,10 +151,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     errorMessage,
                     style: TextStyle(color: Colors.redAccent),
                   )),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               SizedBox(
                 width: double.infinity,
-                height: 70,
+                height: 60,
                 child: ElevatedButton(
                   onPressed: () {
                     register();

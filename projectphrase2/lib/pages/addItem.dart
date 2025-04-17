@@ -60,15 +60,23 @@ class _AdditemState extends State<Additem> {
       price: int.parse(price),
       description: description,
       photoURL: null,
-
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => Product()))
     );
 
     try {
-      await FirebaseFirestore.instance.collection('products').add({
+      final ref = await FirebaseFirestore.instance.collection('products').add({
         ...product.toJson(),
-        'createdAt': FieldValue.serverTimestamp(), // ✅ required for ordering
+        'createdAt': FieldValue.serverTimestamp(),
+        'id': '', // ชั่วคราว เพื่อให้ได้ ref.id ก่อน
       });
+
+      await ref.update({'id': ref.id});
+
+      // เก็บ productId ที่ได้จาก Firestore
+      final productId = ref.id;
+      print("Product created with ID: $productId");
+
+      // ส่ง productId ไปยัง ProductModel
+      final newProduct = product.copyWith(id: productId);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -88,8 +96,10 @@ class _AdditemState extends State<Additem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Add Product"),
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
@@ -99,7 +109,7 @@ class _AdditemState extends State<Additem> {
             Align(
               alignment: Alignment.center,
               child: Container(
-                width: 296,
+                width: 280,
                 height: 280,
                 decoration: BoxDecoration(
                   color: Color(0xFFD9D9D9),
@@ -113,12 +123,14 @@ class _AdditemState extends State<Additem> {
               labelname: "Product Name",
               controller: nameController,
             ),
+            SizedBox(height: 5),
             InputBox(
               inputname: "Price",
               labelname: "THB",
               controller: priceController,
               errorText: priceError,
             ),
+            SizedBox(height: 5),
             InputBox(
               inputname: "Description",
               labelname: "Description",
@@ -142,13 +154,12 @@ class SaveButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF4DA688),
-        minimumSize: Size(double.infinity, 50),
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        backgroundColor: Color.fromARGB(178, 0, 127, 85),
+        minimumSize: Size(double.infinity, 60),
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(100),
         ),
-        
       ),
       child: Text("Save", style: TextStyle(fontSize: 18, color: Colors.white)),
     );
@@ -159,7 +170,7 @@ class InputBox extends StatelessWidget {
   final String inputname;
   final String labelname;
   final TextEditingController controller;
-  final String? errorText; // 
+  final String? errorText; //
 
   const InputBox({
     super.key,
@@ -183,8 +194,8 @@ class InputBox extends StatelessWidget {
             keyboardType:
                 labelname == "THB" ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
-              labelText: labelname,
-              labelStyle: TextStyle(color: Colors.grey),
+              hintText: labelname,
+              hintStyle: TextStyle(color: Colors.grey),
               errorText: errorText, // 👈 show red error label here
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -192,7 +203,8 @@ class InputBox extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.green, width: 2),
+                borderSide:
+                    BorderSide(color: const Color.fromARGB(255, 0, 127, 85)),
               ),
             ),
           ),

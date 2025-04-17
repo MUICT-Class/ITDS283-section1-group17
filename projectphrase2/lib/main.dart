@@ -3,7 +3,6 @@ import 'package:projectphrase2/models/product.dart';
 import 'package:projectphrase2/pages/displayproduct.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
-import 'package:projectphrase2/pages/loading.dart';
 
 import 'package:projectphrase2/pages/usermanage_page.dart';
 import 'package:projectphrase2/widgets/product_display.dart';

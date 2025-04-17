@@ -4,7 +4,6 @@ import 'package:projectphrase2/pages/chat.dart';
 
 class Displayproduct extends StatelessWidget {
   final ProductModel product;
-
   const Displayproduct({super.key, required this.product});
 
   @override
@@ -14,7 +13,8 @@ class Displayproduct extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_outlined),
-        onPressed: () => Navigator.pop(context),),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           Padding(
               padding: EdgeInsets.only(right: 10),
@@ -118,23 +118,24 @@ class Displayproduct extends StatelessWidget {
               child: SizedBox(
                   height: 48,
                   child: GestureDetector(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Chat())),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Chat())),
                       child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(90)),
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Chat now  ",
-                          style: TextStyle(fontSize: 16),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(90)),
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Chat now  ",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            Icon(Icons.forward_to_inbox)
+                          ],
                         ),
-                        Icon(Icons.forward_to_inbox)
-                      ],
-                    ),
-                  )))),
+                      )))),
         ],
       ),
     );

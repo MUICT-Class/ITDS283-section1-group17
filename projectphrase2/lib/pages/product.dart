@@ -18,81 +18,89 @@ class Product extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Product Management")),
-      body: Stack(
-        children: [
-          StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('products')
-                .orderBy('createdAt', descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("Product Management"),
+        backgroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Stack(
+          children: [
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('products')
+                  .orderBy('createdAt', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return Center(child: Text("No products yet."));
-              }
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(child: Text("No products yet."));
+                }
 
-              final docs = snapshot.data!.docs;
-              final productList = docs
-                  .map((doc) =>
-                      ProductModel.fromJson(doc.data() as Map<String, dynamic>))
-                  .toList();
+                final docs = snapshot.data!.docs;
+                final productList = docs
+                    .map((doc) => ProductModel.fromJson(
+                        doc.data() as Map<String, dynamic>,
+                        id: doc.id))
+                    .toList();
 
-              return ListView.separated(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 100),
-                itemCount: productList.length,
-                itemBuilder: (context, index) {
-                  return Productitem(product: productList[index]);
-                },
-                separatorBuilder: (context, index) => SizedBox(height: 12),
-              );
-            },
-          ),
+                return ListView.separated(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 100),
+                  itemCount: productList.length,
+                  itemBuilder: (context, index) {
+                    return Productitem(product: productList[index]);
+                  },
+                  separatorBuilder: (context, index) => SizedBox(height: 40),
+                );
+              },
+            ),
 
-          // floating buttons
-          Positioned(
+            // floating buttons
+            Positioned(
+                bottom: 30,
+                left: 30,
+                child: SizedBox(
+                  height: 65,
+                  width: 65,
+                  child: FloatingActionButton(
+                    heroTag: "home",
+                    backgroundColor: Colors.white,
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                      // go back to home
+                    },
+                    child: Icon(Icons.home, color: Color(0xFF389B72)),
+                    shape: CircleBorder(
+                      side: BorderSide(color: Color(0xFF389B72)),
+                    ),
+                  ),
+                )),
+            Positioned(
               bottom: 30,
-              left: 30,
+              right: 30,
               child: SizedBox(
-                height: 65,
-                width: 65,
+                width: 70,
+                height: 70,
                 child: FloatingActionButton(
-                  heroTag: "home",
-                  backgroundColor: Colors.white,
+                  heroTag: "add",
+                  backgroundColor: Color(0xFF389B72),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                    // go back to home
+                        MaterialPageRoute(builder: (context) => Additem()));
+                    // add new product
                   },
-                  child: Icon(Icons.home, color: Color(0xFF389B72)),
-                  shape: CircleBorder(
-                    side: BorderSide(color: Color(0xFF389B72)),
-                  ),
+                  child: Icon(Icons.add, color: Colors.white, size: 32),
+                  shape: const CircleBorder(),
                 ),
-              )),
-          Positioned(
-            bottom: 30,
-            right: 30,
-            child: SizedBox(
-              width: 70,
-              height: 70,
-              child: FloatingActionButton(
-                heroTag: "add",
-                backgroundColor: Color(0xFF389B72),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Additem()));
-                  // add new product
-                },
-                child: Icon(Icons.add, color: Colors.white, size: 32),
-                shape: const CircleBorder(),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

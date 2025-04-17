@@ -22,10 +22,12 @@ class TextFieldInLog extends StatelessWidget {
       obscureText: isPass,
       controller: textEditingController,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           prefixIcon: Icon(icon),
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
+          labelText: hintText,
+          // hintText: hintText,
+          labelStyle:
+              const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -61,9 +63,10 @@ class TextFieldInSign extends StatelessWidget {
       obscureText: isPass,
       controller: textEditingController,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          labelText: hintText,
+          labelStyle:
+              const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -83,13 +86,13 @@ class TextFieldInSign extends StatelessWidget {
 class TextFieldSearch extends StatelessWidget {
   final TextEditingController textEditingController;
   final String hintText;
-  final IconData icon;
+  final VoidCallback? onSearchPressed;
 
   const TextFieldSearch({
     super.key,
     required this.textEditingController,
     required this.hintText,
-    required this.icon,
+    this.onSearchPressed,
   });
 
   @override
@@ -99,7 +102,13 @@ class TextFieldSearch extends StatelessWidget {
       controller: textEditingController,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-          prefixIcon: Icon(icon, color: Color.fromARGB(178, 0, 127, 85)),
+          prefixIcon: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: onSearchPressed ??
+                () {
+                  print('Search icon pressed but no callback assigned');
+                },
+          ),
           hintText: hintText,
           hintStyle: const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
           border: OutlineInputBorder(
