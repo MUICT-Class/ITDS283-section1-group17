@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/models/product.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/widgets/productItem.dart';
+import 'package:projectphrase2/models/product.dart';
 
 final List<ProductModel> products = [
   demoProduct,
@@ -19,15 +21,35 @@ class Product extends StatelessWidget {
       appBar: AppBar(title: Text("Product Management")),
       body: Stack(
         children: [
-          // main list view
-          ListView.separated(
-            padding: EdgeInsets.fromLTRB(
-                20, 20, 20, 100), // leave bottom space for buttons
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              return Productitem(product: products[index]);
+          StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('products')
+                .orderBy('createdAt', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return Center(child: Text("No products yet."));
+              }
+
+              final docs = snapshot.data!.docs;
+              final productList = docs
+                  .map((doc) =>
+                      ProductModel.fromJson(doc.data() as Map<String, dynamic>))
+                  .toList();
+
+              return ListView.separated(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 100),
+                itemCount: productList.length,
+                itemBuilder: (context, index) {
+                  return Productitem(product: productList[index]);
+                },
+                separatorBuilder: (context, index) => SizedBox(height: 12),
+              );
             },
-            separatorBuilder: (context, index) => SizedBox(height: 12),
           ),
 
           // floating buttons
