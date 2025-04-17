@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 0,
                 crossAxisSpacing: 20,
-                childAspectRatio: 0.67,
+                childAspectRatio: 0.57, //width/height
                 children: const [
                   ProductDisplay(),
                   ProductDisplay(),

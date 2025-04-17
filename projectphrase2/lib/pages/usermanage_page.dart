@@ -73,6 +73,7 @@ class _UsermanagePageState extends State<UsermanagePage> {
                               child: Column(
                                 children: [
                                   Profilecard(
+<<<<<<< HEAD
                                     user: user ??
                                         UserModel(
                                           name: 'No name',
@@ -83,6 +84,9 @@ class _UsermanagePageState extends State<UsermanagePage> {
                                                   .currentUser?.phoneNumber ??
                                               '',
                                         ),
+=======
+                                    user: demoUser,
+>>>>>>> origin/usermanage
                                   ),
                                   SizedBox(
                                     height: 20,

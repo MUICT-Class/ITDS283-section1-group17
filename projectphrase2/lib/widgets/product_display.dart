@@ -56,15 +56,15 @@ class ProductDisplay extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              '\$360.00',
-              style: TextStyle(
-                fontSize: 18,
-                color: Color.fromARGB(255, 0, 127, 85),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            '\$360.00',
+            style: TextStyle(
+              fontSize: 18,
+              color: Color.fromARGB(255, 0, 127, 85),
+              fontWeight: FontWeight.w600,
+            )),
           ],
         ),
       ),
