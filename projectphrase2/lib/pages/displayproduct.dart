@@ -105,7 +105,7 @@ class Displayproduct extends StatelessWidget {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '\$${product.price.toStringAsFixed(2)}',
+                            '\฿${product.price.toStringAsFixed(2)}',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,

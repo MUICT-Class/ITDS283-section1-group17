@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/models/product.dart';
 import 'package:projectphrase2/pages/product.dart';
 
 class Additem extends StatefulWidget {
@@ -21,7 +24,7 @@ class _AdditemState extends State<Additem> {
     descriptionController.dispose();
     super.dispose();
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +43,7 @@ class _AdditemState extends State<Additem> {
     });
   }
 
-  void _onSave() {
+  void _onSave() async {
     final name = nameController.text.trim();
     final price = priceController.text.trim();
     final description = descriptionController.text.trim();
@@ -49,33 +52,44 @@ class _AdditemState extends State<Additem> {
         price.isEmpty ||
         description.isEmpty ||
         priceError != null) {
-      return; // block save if anything is invalid
+      return;
     }
 
-    print("Name: $name");
-    print("Price: $price");
-    print("Description: $description");
+    final product = ProductModel(
+      name: name,
+      price: int.parse(price),
+      description: description,
+      photoURL: null,
 
-    ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text("Item added successfully!"),
-      backgroundColor: Colors.grey[700],
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(16),
-    ),
-  );
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => Product()))
+    );
 
-    // Clear all fields
-    nameController.clear();
-    priceController.clear();
-    descriptionController.clear();
+    try {
+      await FirebaseFirestore.instance.collection('products').add({
+        ...product.toJson(),
+        'createdAt': FieldValue.serverTimestamp(), // ✅ required for ordering
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Item added to Firebase!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      nameController.clear();
+      priceController.clear();
+      descriptionController.clear();
+    } catch (e) {
+      print("Firebase error: $e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add Product"),
+      appBar: AppBar(
+        title: Text("Add Product"),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
@@ -134,6 +148,7 @@ class SaveButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
+        
       ),
       child: Text("Save", style: TextStyle(fontSize: 18, color: Colors.white)),
     );
@@ -186,4 +201,3 @@ class InputBox extends StatelessWidget {
     );
   }
 }
-
