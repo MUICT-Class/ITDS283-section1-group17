@@ -17,15 +17,16 @@ class Displayproduct extends StatelessWidget {
         ),
         actions: [
           Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: IconButton(
-                onPressed: () => Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Chat())),
-                icon: Icon(
-                  Icons.mail,
-                  color: Color(0xFF389B72),
-                ),
-              ))
+            padding: EdgeInsets.only(right: 10),
+            child: IconButton(
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Chat())),
+              icon: Icon(
+                Icons.mail,
+                color: Color(0xFF389B72),
+              ),
+            ),
+          )
         ],
       ),
       body: Stack(

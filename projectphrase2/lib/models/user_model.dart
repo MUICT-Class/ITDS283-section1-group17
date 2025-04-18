@@ -21,9 +21,9 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  factory UserModel.fromMap(Map<String, dynamic> map, {required String uid}) {
     return UserModel(
-      uid: map['uid'] != null ? map['uid'] as String : null,
+      uid: uid,
       name: map['name'] != null ? map['name'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
       mobile: map['mobile'] != null ? map['mobile'] as String : null,
@@ -34,5 +34,6 @@ class UserModel {
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>,
+          uid: ""); // Placeholder for uid
 }

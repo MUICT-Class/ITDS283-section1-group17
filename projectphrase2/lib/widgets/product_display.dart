@@ -108,13 +108,6 @@ class _ProductDisplayState extends State<ProductDisplay> {
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              'Books & Stationeries',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-            ),
             const SizedBox(height: 0),
             Text(
               product.name,
@@ -123,7 +116,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 2),
             Text('\$${product.price}',
                 style: TextStyle(
                   fontSize: 18,
