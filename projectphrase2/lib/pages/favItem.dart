@@ -34,7 +34,7 @@ class _FavItemState extends State<FavItem> {
     return productSnap.docs.map((doc) {
       final data = doc.data();
       final id = doc.id;
-      print('📦 Product loaded: $id'); // สำหรับ debug
+      print('📦 Favorite Product : $id'); // สำหรับ debug
       return ProductModel.fromJson(data, id: id);
     }).toList();
   }

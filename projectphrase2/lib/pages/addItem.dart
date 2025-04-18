@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/models/product.dart';
 import 'package:projectphrase2/pages/product.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class Additem extends StatefulWidget {
   const Additem({super.key});
@@ -15,14 +17,73 @@ class _AdditemState extends State<Additem> {
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
+  final TextEditingController imageUrlController = TextEditingController();
   String? priceError;
+  String? imageUrl;
+  File? _selectedImage;
 
   @override
   void dispose() {
     nameController.dispose();
     priceController.dispose();
     descriptionController.dispose();
+    imageUrlController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        imageUrl = null;
+      });
+    }
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        imageUrl = null;
+      });
+    }
+  }
+
+  void _showUrlInputDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text('Enter Image URL'),
+        content: TextField(
+          controller: imageUrlController,
+          decoration: InputDecoration(hintText: 'https://...'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  imageUrl = imageUrlController.text.trim();
+                  _selectedImage = null;
+                });
+                Navigator.pop(context);
+              },
+              child: Text('OK',
+                  style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)))),
+        ],
+      ),
+    );
   }
 
   @override
@@ -59,14 +120,14 @@ class _AdditemState extends State<Additem> {
       name: name,
       price: int.parse(price),
       description: description,
-      photoURL: null,
+      photoURL: imageUrl,
     );
 
     try {
       final ref = await FirebaseFirestore.instance.collection('products').add({
         ...product.toJson(),
         'createdAt': FieldValue.serverTimestamp(),
-        'id': '', // ชั่วคราว เพื่อให้ได้ ref.id ก่อน
+        'id': '',
       });
 
       await ref.update({'id': ref.id});
@@ -81,9 +142,15 @@ class _AdditemState extends State<Additem> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Item added to Firebase!"),
-          backgroundColor: Colors.green,
+          backgroundColor: Color.fromARGB(
+            255,
+            0,
+            127,
+            85,
+          ),
         ),
       );
+      Navigator.of(context).pop();
 
       nameController.clear();
       priceController.clear();
@@ -108,12 +175,54 @@ class _AdditemState extends State<Additem> {
           children: [
             Align(
               alignment: Alignment.center,
-              child: Container(
-                width: 280,
-                height: 280,
-                decoration: BoxDecoration(
-                  color: Color(0xFFD9D9D9),
-                  borderRadius: BorderRadius.circular(30),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => SimpleDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('Upload Photo'),
+                      children: [
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _pickImageFromCamera();
+                          },
+                          child: Text('📷 Camera'),
+                        ),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _pickImageFromGallery();
+                          },
+                          child: Text('🖼️ Gallery'),
+                        ),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _showUrlInputDialog();
+                          },
+                          child: Text('🔗 image link'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 280,
+                  height: 280,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFD9D9D9),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: _selectedImage != null
+                      ? Image.file(_selectedImage!, fit: BoxFit.cover)
+                      : imageUrl != null && imageUrl!.isNotEmpty
+                          ? Image.network(imageUrl!, fit: BoxFit.cover)
+                          : Center(
+                              child: Icon(Icons.image,
+                                  size: 60, color: Colors.grey)),
                 ),
               ),
             ),

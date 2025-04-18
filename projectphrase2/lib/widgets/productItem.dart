@@ -14,7 +14,7 @@ class Productitem extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
       ),
       child: Container(
-        height: 160,
+        constraints: BoxConstraints(minHeight: 160),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -27,7 +27,8 @@ class Productitem extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
-                      product.photoURL ?? 'assets/images/default.jpg',
+                      product.photoURL ??
+                          'assets/images/Softcover-Book-Mockup.jpg',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -39,12 +40,21 @@ class Productitem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('Name: ${product.name}'),
+                        Text(
+                          'Name: ${product.name}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                         SizedBox(
                           height: 5,
                         ),
-                        Text('Price: ${product.price}'),
+                        Text(
+                          'Price: ${product.price}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                         SizedBox(
                           height: 5,
                         ),
@@ -53,8 +63,12 @@ class Productitem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
-                        Text('ID: ${product.id ?? "null"}',
-                            style: TextStyle(fontSize: 10, color: Colors.grey)),
+                        Text(
+                          'ID: ${product.id ?? "null"}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 10, color: Colors.grey),
+                        ),
                       ],
                     )),
               )

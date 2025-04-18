@@ -48,38 +48,38 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPageWithNavbar extends StatefulWidget {
-  const MainPageWithNavbar({super.key});
+// class MainPageWithNavbar extends StatefulWidget {
+//   const MainPageWithNavbar({super.key});
 
-  @override
-  State<MainPageWithNavbar> createState() => _MainPageWithNavbarState();
-}
+//   @override
+//   State<MainPageWithNavbar> createState() => _MainPageWithNavbarState();
+// }
 
-class _MainPageWithNavbarState extends State<MainPageWithNavbar> {
-  int _selectedIndex = 0;
+// class _MainPageWithNavbarState extends State<MainPageWithNavbar> {
+//   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    HomePage(),
-    FavItem(),
-    Additem(),
-    Chat(),
-    UsermanagePage(),
-  ];
+//   final List<Widget> _pages = const [
+//     HomePage(),
+//     FavItem(),
+//     Additem(),
+//     Chat(),
+//     UsermanagePage(),
+//   ];
 
-  void _onTabTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+//   void _onTabTapped(int index) {
+//     setState(() {
+//       _selectedIndex = index;
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: Navbar(
-        currentIndex: _selectedIndex,
-        onTap: _onTabTapped,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: _pages[_selectedIndex],
+//       bottomNavigationBar: Navbar(
+//         currentIndex: _selectedIndex,
+//         onTap: _onTabTapped,
+//       ),
+//     );
+//   }
+// }

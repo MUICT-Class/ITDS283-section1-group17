@@ -15,7 +15,7 @@ class ProductModel {
 
   ProductModel copyWith({String? id}) {
     return ProductModel(
-      id: id ?? this.id, // ถ้าไม่ได้ส่ง id ใหม่ ให้ใช้ id เดิม
+      id: id ?? this.id,
       name: this.name,
       price: this.price,
       description: this.description,
