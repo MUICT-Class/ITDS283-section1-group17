@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product.dart';
+import 'package:projectphrase2/models/product_model.dart';
 import 'package:projectphrase2/pages/chat.dart';
 
 class Displayproduct extends StatelessWidget {

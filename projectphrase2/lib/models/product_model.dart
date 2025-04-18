@@ -3,12 +3,14 @@ class ProductModel {
   final int price;
   final String description;
   final String? photoURL;
+  final String? userId;
 
   ProductModel({
     required this.name,
     required this.price,
     required this.description,
     this.photoURL,
+    this.userId
   });
 
   // Convert Firestore data -> ProductModel
@@ -18,6 +20,7 @@ class ProductModel {
       price: json['price'],
       description: json['description'],
       photoURL: json['photoURL'],
+      userId: json['userId'],
     );
   }
 
@@ -28,13 +31,7 @@ class ProductModel {
       'price': price,
       'description': description,
       'photoURL': photoURL,
+      'userId': userId,
     };
   }
 }
-
-final demoProduct = ProductModel(
-  name: "Book",
-  price: 360,
-  description: "Default product for demo.",
-  photoURL: 'assets/images/default.jpg',
-);

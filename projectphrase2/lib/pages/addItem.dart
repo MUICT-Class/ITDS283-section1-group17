@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product.dart';
+import 'package:projectphrase2/models/product_model.dart';
 import 'package:projectphrase2/pages/product.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Additem extends StatefulWidget {
   const Additem({super.key});
@@ -42,11 +43,16 @@ class _AdditemState extends State<Additem> {
       }
     });
   }
+  // void onTap() asyncn {
+  //   File? image;
+
+  // }
 
   void _onSave() async {
     final name = nameController.text.trim();
     final price = priceController.text.trim();
     final description = descriptionController.text.trim();
+    final user = FirebaseAuth.instance.currentUser;
 
     if (name.isEmpty ||
         price.isEmpty ||
@@ -60,8 +66,9 @@ class _AdditemState extends State<Additem> {
       price: int.parse(price),
       description: description,
       photoURL: null,
+      userId: user?.uid,
 
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => Product()))
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => Product()))
     );
 
     try {
@@ -104,6 +111,18 @@ class _AdditemState extends State<Additem> {
                 decoration: BoxDecoration(
                   color: Color(0xFFD9D9D9),
                   borderRadius: BorderRadius.circular(30),
+                ),
+                child: Center(
+                  // ✅ This centers the icon inside the container
+                  child: GestureDetector(
+                    onTapDown: (details) => ShowImageOption(context, details),
+                    child: IconButton(
+                      icon: Icon(Icons.camera_enhance),
+                      color: Colors.white,
+                      iconSize: 36,
+                      onPressed: () {}, // still required
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -148,18 +167,53 @@ class SaveButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        
       ),
       child: Text("Save", style: TextStyle(fontSize: 18, color: Colors.white)),
     );
   }
 }
 
+void ShowImageOption(BuildContext context, TapDownDetails details) async {
+  final selected = await showMenu(
+    context: context,
+    position: RelativeRect.fromLTRB(
+      details.globalPosition.dx,
+      details.globalPosition.dy,
+      0,
+      0,
+    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    color: Colors.white,
+    items: [
+      PopupMenuItem(
+          child: Row(
+        children: [
+          Icon(Icons.camera_alt_outlined), Text("  Take a Photo",
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400
+        ),)],
+      )),
+      PopupMenuItem(
+          child: Row(
+        children: [
+          Icon(Icons.photo_album_outlined),
+          Text("  choose from gallery",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400
+          ),)
+        ],
+      ))
+    ],
+  );
+}
+
 class InputBox extends StatelessWidget {
   final String inputname;
   final String labelname;
   final TextEditingController controller;
-  final String? errorText; // 
+  final String? errorText; //
 
   const InputBox({
     super.key,
