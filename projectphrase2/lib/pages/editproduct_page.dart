@@ -7,14 +7,14 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class EditprofilePage extends StatefulWidget {
-  const EditprofilePage({super.key});
+class EditproductPage extends StatefulWidget {
+  const EditproductPage({super.key});
 
   @override
-  State<EditprofilePage> createState() => editprofileState();
+  State<EditproductPage> createState() => editproducteState();
 }
 
-class editprofileState extends State<EditprofilePage> {
+class editproductState extends State<EditproductPage> {
   final nameController = TextEditingController();
   final mobileController = TextEditingController();
   final TextEditingController imageUrlController = TextEditingController();
