@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/product.dart';
+import '../models/product_model.dart';
 import '../widgets/product_display.dart';
 
 class FavItem extends StatefulWidget {

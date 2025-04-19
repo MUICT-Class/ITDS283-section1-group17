@@ -8,7 +8,7 @@ import '../services/auth_service.dart';
 import '../widgets/fieldinput.dart';
 import '../widgets/product_display.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:projectphrase2/models/product.dart';
+import 'package:projectphrase2/models/product_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({

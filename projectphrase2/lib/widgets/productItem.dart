@@ -1,12 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product.dart';
+import 'package:projectphrase2/models/product_model.dart';
 
-class Productitem extends StatelessWidget {
+class ProductItem extends StatelessWidget {
   final ProductModel product;
-  const Productitem({required this.product, super.key});
+  const ProductItem({required this.product, super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Debug log to help check if it's loading correctly
+    print("Rendering product: ${product.name}, photoURL: ${product.photoURL}");
+
+    // Choose image source
+    Widget imageWidget;
+
+    if (product.photoURL != null && product.photoURL!.startsWith('assets/')) {
+      imageWidget = Image.asset(
+        product.photoURL!,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.broken_image, size: 48);
+        },
+      );
+    } else if (product.photoURL != null) {
+      imageWidget = Image.network(
+        product.photoURL!,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.broken_image, size: 48);
+        },
+      );
+    } else {
+      imageWidget = Image.asset(
+        'assets/images/Softcover-Book-Mockup.jpg',
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.broken_image, size: 48);
+        },
+      );
+    }
+
     print('🧩 Productitem: ${product.name} | ID: ${product.id}');
     return Card(
       color: Color.fromARGB(255, 213, 213, 213),
@@ -78,3 +110,4 @@ class Productitem extends StatelessWidget {
     );
   }
 }
+

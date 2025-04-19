@@ -42,10 +42,11 @@ dependencies:
   cross_file: ^0.3.3+2
   firebase_storage: ^12.4.5
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

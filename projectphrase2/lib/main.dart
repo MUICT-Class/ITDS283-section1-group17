@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product.dart';
-import 'package:projectphrase2/pages/displayproduct.dart';
+import 'package:projectphrase2/models/product_model.dart';
+import 'package:projectphrase2/pages/productdetail_page.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
 
@@ -29,7 +29,6 @@ void main() async {
   } catch (e) {
     print('❌ Firebase Initialization Error: $e');
   }
-
   runApp(MyApp());
 }
 

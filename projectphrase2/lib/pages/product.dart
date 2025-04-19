@@ -1,41 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product.dart';
+import 'package:projectphrase2/models/product_model.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/widgets/productItem.dart';
-import 'package:projectphrase2/models/product.dart';
+import 'package:projectphrase2/models/product_model.dart';
 
-final List<ProductModel> products = [
-  demoProduct,
-  demoProduct,
-  demoProduct,
-];
+
 
 class Product extends StatelessWidget {
   const Product({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Product Management"),
-        backgroundColor: Colors.white,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Stack(
-          children: [
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('products')
-                  .orderBy('createdAt', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
+      appBar: AppBar(title: Text("Product Management")),
+      body: Stack(
+        children: [
+          StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('products')
+                .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+                .orderBy('createdAt', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(child: Text("No products yet."));
@@ -52,7 +45,7 @@ class Product extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 100),
                   itemCount: productList.length,
                   itemBuilder: (context, index) {
-                    return Productitem(product: productList[index]);
+                    return ProductItem(product: productList[index]);
                   },
                   separatorBuilder: (context, index) => SizedBox(height: 40),
                 );
@@ -101,7 +94,6 @@ class Product extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

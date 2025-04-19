@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product.dart';
-import 'package:projectphrase2/pages/product.dart';
+import 'package:projectphrase2/models/product_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -32,24 +33,26 @@ class _AdditemState extends State<Additem> {
     super.dispose();
   }
 
+  // Pick image from Camera
   Future<void> _pickImageFromCamera() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        imageUrl = null;
+        imageUrl = null; // Reset URL if new image is selected
       });
     }
   }
 
+  // Pick image from Gallery
   Future<void> _pickImageFromGallery() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        imageUrl = null;
+        imageUrl = null; // Reset URL if new image is selected
       });
     }
   }
@@ -90,7 +93,7 @@ class _AdditemState extends State<Additem> {
               onPressed: () {
                 setState(() {
                   imageUrl = imageUrlController.text.trim();
-                  _selectedImage = null;
+                  _selectedImage = null; // Reset image selection if URL is used
                 });
                 Navigator.pop(context);
               },
@@ -119,15 +122,31 @@ class _AdditemState extends State<Additem> {
     });
   }
 
+  // Save the product to Firestore
   void _onSave() async {
     final name = nameController.text.trim();
     final price = priceController.text.trim();
     final description = descriptionController.text.trim();
+    final user = FirebaseAuth.instance.currentUser;
+
+    // Ensure price is valid
+    final parsedPrice = int.tryParse(price);
+    if (parsedPrice == null) {
+      print("Invalid price input");
+      return; // Exit early if the price is invalid
+    }
 
     String? finalImageUrl;
     if (_selectedImage != null) {
-      print(_selectedImage);
-      finalImageUrl = await uploadImageToFirebase(_selectedImage!);
+      try {
+        print(_selectedImage);
+        print("Uploading image to Firebase...");
+        finalImageUrl = await uploadImageToFirebase(_selectedImage!);
+        print("Image uploaded: $finalImageUrl");
+      } catch (e) {
+        print("Image upload error: $e");
+        finalImageUrl = null; // Handle error by not setting an image URL
+      }
     } else if (imageUrl != null && imageUrl!.isNotEmpty) {
       finalImageUrl = imageUrl;
     }
@@ -136,13 +155,15 @@ class _AdditemState extends State<Additem> {
         price.isEmpty ||
         description.isEmpty ||
         priceError != null) {
-      return;
+      print("Missing fields or invalid price");
+      return; // Exit early if any field is empty or price is invalid
     }
 
     final product = ProductModel(
       name: name,
-      price: int.parse(price),
+      price: parsedPrice,
       description: description,
+      userId: user?.uid,
       photoURL: finalImageUrl,
     );
 
@@ -154,23 +175,15 @@ class _AdditemState extends State<Additem> {
       });
 
       await ref.update({'id': ref.id});
-
-      // เก็บ productId ที่ได้จาก Firestore
       final productId = ref.id;
       print("Product created with ID: $productId");
 
-      // ส่ง productId ไปยัง ProductModel
       final newProduct = product.copyWith(id: productId);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Item added to Firebase!"),
-          backgroundColor: Color.fromARGB(
-            255,
-            0,
-            127,
-            85,
-          ),
+          backgroundColor: Color.fromARGB(255, 0, 127, 85),
         ),
       );
       Navigator.of(context).pop();
