@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Chat extends StatelessWidget {
-  const Chat({super.key});
+class ChatHistory extends StatelessWidget {
+  const ChatHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +9,7 @@ class Chat extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: Text("Chat History"),
       ),
     );

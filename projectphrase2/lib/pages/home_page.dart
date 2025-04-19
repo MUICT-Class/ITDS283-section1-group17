@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/addItem.dart';
-import 'package:projectphrase2/pages/chat.dart';
+import 'package:projectphrase2/pages/chat_page.dart';
 import 'package:projectphrase2/pages/favItem.dart';
 import 'package:projectphrase2/pages/usermanage_page.dart';
 import 'package:projectphrase2/widgets/navbar.dart';

@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projectphrase2/models/product_model.dart';
 import 'package:projectphrase2/pages/productdetail_page.dart';
- // Import Displayproduct page
- class ProductDisplay extends StatefulWidget {
+
+// Import Displayproduct page
+class ProductDisplay extends StatefulWidget {
   final ProductModel product;
   const ProductDisplay({super.key, required this.product});
 
@@ -22,7 +23,8 @@ class _ProductDisplayState extends State<ProductDisplay> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => ProductdetailPage(product: widget.product)),
+          MaterialPageRoute(
+              builder: (_) => ProductdetailPage(product: widget.product)),
         );
       },
       child: Container(
@@ -38,8 +40,10 @@ class _ProductDisplayState extends State<ProductDisplay> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: widget.product.photoURL != null
-                        ? Image.network(widget.product.photoURL!, fit: BoxFit.cover)
-                        : Image.asset('assets/images/Softcover-Book-Mockup.jpg', fit: BoxFit.cover),
+                        ? Image.network(widget.product.photoURL!,
+                            fit: BoxFit.cover)
+                        : Image.asset('assets/images/Softcover-Book-Mockup.jpg',
+                            fit: BoxFit.cover),
                   ),
                 ),
                 Positioned(
@@ -57,7 +61,8 @@ class _ProductDisplayState extends State<ProductDisplay> {
                         return CircularProgressIndicator();
                       }
 
-                      final isFavorite = snapshot.hasData && snapshot.data?.exists == true;
+                      final isFavorite =
+                          snapshot.hasData && snapshot.data?.exists == true;
 
                       return GestureDetector(
                         onTap: () async {
@@ -77,7 +82,9 @@ class _ProductDisplayState extends State<ProductDisplay> {
                           radius: 18,
                           backgroundColor: Colors.white,
                           child: Icon(
-                            isFavorite ? Icons.favorite : Icons.favorite_border_outlined,
+                            isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border_outlined,
                             color: isFavorite ? Colors.red : Colors.grey,
                             size: 18,
                           ),
@@ -93,19 +100,14 @@ class _ProductDisplayState extends State<ProductDisplay> {
             Text(
               widget.product.name,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
             ),
-<<<<<<< HEAD
-            const SizedBox(height: 2),
-            Text('\$${product.price}',
-=======
             const SizedBox(height: 5),
             Text('\$${widget.product.price}',
->>>>>>> origin/productdetail
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 14,
                   color: Color.fromARGB(255, 0, 127, 85),
                   fontWeight: FontWeight.w600,
                 )),
