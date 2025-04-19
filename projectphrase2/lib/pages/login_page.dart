@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 100,
+                height: 80,
               ),
               const Text(
                 "Login",
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                 "login to your account",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              const SizedBox(height: 60),
+              const SizedBox(height: 50),
               TextFieldInLog(
                 textEditingController: controllerEmail,
                 hintText: "email",

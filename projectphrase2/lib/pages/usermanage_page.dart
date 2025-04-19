@@ -121,7 +121,7 @@ class _UsermanagePageState extends State<UsermanagePage> {
                                     height: 20,
                                   ),
                                   Itembar(
-                                    text: "Chat",
+                                    text: "Chat History",
                                     icon: Icon(Icons.chat_bubble_outline,
                                         color: Color(0xFF007F55)),
                                     onTap: () {
@@ -220,7 +220,7 @@ class Itembar extends StatelessWidget {
                           "  ${text}   ",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            fontSize: 18,
+                            fontSize: 16,
                             color: color ?? Colors.black,
                           ),
                         ),

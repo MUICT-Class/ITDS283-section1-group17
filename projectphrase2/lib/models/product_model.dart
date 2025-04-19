@@ -1,4 +1,5 @@
 class ProductModel {
+  final String? id;
   final String name;
   final int price;
   final String description;
@@ -6,6 +7,7 @@ class ProductModel {
   final String? userId;
 
   ProductModel({
+    this.id,
     required this.name,
     required this.price,
     required this.description,
@@ -13,9 +15,20 @@ class ProductModel {
     this.userId
   });
 
-  // Convert Firestore data -> ProductModel
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
+  ProductModel copyWith({String? id}) {
     return ProductModel(
+      id: id ?? this.id,
+      name: this.name,
+      price: this.price,
+      description: this.description,
+      photoURL: this.photoURL,
+    );
+  }
+
+  // Convert Firestore data -> ProductModel
+  factory ProductModel.fromJson(Map<String, dynamic> json, {String? id}) {
+    return ProductModel(
+      id: id, // เพิ่มการรับค่า id จาก Firestore
       name: json['name'],
       price: json['price'],
       description: json['description'],

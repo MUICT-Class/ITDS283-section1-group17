@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/models/product_model.dart';
-import 'package:projectphrase2/pages/displayproduct.dart';
+import 'package:projectphrase2/pages/productdetail_page.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
-import 'package:projectphrase2/pages/loading.dart';
 
 import 'package:projectphrase2/pages/usermanage_page.dart';
 import 'package:projectphrase2/widgets/product_display.dart';
@@ -48,38 +47,38 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPageWithNavbar extends StatefulWidget {
-  const MainPageWithNavbar({super.key});
+// class MainPageWithNavbar extends StatefulWidget {
+//   const MainPageWithNavbar({super.key});
 
-  @override
-  State<MainPageWithNavbar> createState() => _MainPageWithNavbarState();
-}
+//   @override
+//   State<MainPageWithNavbar> createState() => _MainPageWithNavbarState();
+// }
 
-class _MainPageWithNavbarState extends State<MainPageWithNavbar> {
-  int _selectedIndex = 0;
+// class _MainPageWithNavbarState extends State<MainPageWithNavbar> {
+//   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    HomePage(),
-    FavItem(),
-    Additem(),
-    Chat(),
-    UsermanagePage(),
-  ];
+//   final List<Widget> _pages = const [
+//     HomePage(),
+//     FavItem(),
+//     Additem(),
+//     Chat(),
+//     UsermanagePage(),
+//   ];
 
-  void _onTabTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+//   void _onTabTapped(int index) {
+//     setState(() {
+//       _selectedIndex = index;
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: Navbar(
-        currentIndex: _selectedIndex,
-        onTap: _onTabTapped,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: _pages[_selectedIndex],
+//       bottomNavigationBar: Navbar(
+//         currentIndex: _selectedIndex,
+//         onTap: _onTabTapped,
+//       ),
+//     );
+//   }
+// }

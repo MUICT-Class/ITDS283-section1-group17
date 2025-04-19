@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'auth_service.dart';
 import '../pages/home_page.dart';
 import '../pages/login_page.dart';
-import '../pages/loading.dart';
+import 'package:projectphrase2/pages/loading_page.dart';
 
 class AuthLayout extends StatelessWidget {
   const AuthLayout({
@@ -24,7 +24,7 @@ class AuthLayout extends StatelessWidget {
               print("ConnectionState: ${snapshot.connectionState}");
               Widget widget;
               if (snapshot.connectionState != ConnectionState.active) {
-                widget = const Loading();
+                widget = const LoadingPage();
               } else if (snapshot.hasData) {
                 widget = const HomePage();
               } else {

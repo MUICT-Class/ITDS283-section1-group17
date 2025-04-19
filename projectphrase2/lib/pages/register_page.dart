@@ -41,25 +41,25 @@ class _RegisterPageState extends State<RegisterPage> {
     return null;
   }
 
-  String? validateMuictEmail(String value) {
-    final muictEmailRegExp =
-        RegExp(r'^[a-zA-Z0-9._%+-]+@student\.mahidol\.edu$');
-    if (!muictEmailRegExp.hasMatch(value)) {
-      return 'Email must be a valid student.mahidol.edu address';
-    }
-    return null;
-  }
+  // String? validateMuictEmail(String value) {
+  //   final muictEmailRegExp =
+  //       RegExp(r'^[a-zA-Z0-9._%+-]+@student\.mahidol\.edu$');
+  //   if (!muictEmailRegExp.hasMatch(value)) {
+  //     return 'Email must be a valid student.mahidol.edu address';
+  //   }
+  //   return null;
+  // }
 
   void register() async {
     try {
-      final email = controllerEmail.text;
-      String? emailValidation = validateMuictEmail(email);
-      if (emailValidation != null) {
-        setState(() {
-          errorMessage = emailValidation;
-        });
-        return;
-      }
+      // final email = controllerEmail.text;
+      // String? emailValidation = validateMuictEmail(email);
+      // if (emailValidation != null) {
+      //   setState(() {
+      //     errorMessage = emailValidation;
+      //   });
+      //   return;
+      // }
 
       final phoneNumber = controllerMobile.text;
 
@@ -73,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
       final res = await authService.value.createAccount(
-        email: email,
+        email: controllerEmail.text,
         password: controllerPassword.text,
       );
       final uid = res.user?.uid;
@@ -82,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (uid != null) {
         final user = UserModel(
           uid: uid,
-          email: email,
+          email: controllerEmail.text,
           name: controllerUsername.text,
           mobile: controllerMobile.text,
         );
@@ -115,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 100,
+                height: 80,
               ),
               const Text(
                 "Register",
@@ -125,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "create your account",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              const SizedBox(height: 60),
+              const SizedBox(height: 50),
               TextFieldInSign(
                 textEditingController: controllerUsername,
                 hintText: 'Username',
@@ -151,10 +151,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     errorMessage,
                     style: TextStyle(color: Colors.redAccent),
                   )),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               SizedBox(
                 width: double.infinity,
-                height: 70,
+                height: 60,
                 child: ElevatedButton(
                   onPressed: () {
                     register();
@@ -181,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     },
                     child: const Text(
-                      "Login",
+                      " Login",
                       style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
                     ),
                   ),
