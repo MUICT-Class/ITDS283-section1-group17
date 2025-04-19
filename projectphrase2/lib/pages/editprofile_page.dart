@@ -1,72 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:projectphrase2/models/user_model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class Additem extends StatefulWidget {
-  const Additem({super.key});
+class EditprofilePage extends StatefulWidget {
+  const EditprofilePage({super.key});
 
   @override
-  State<Additem> createState() => _AdditemState();
+  State<EditprofilePage> createState() => editprofileState();
 }
 
-class _AdditemState extends State<Additem> {
+class editprofileState extends State<EditprofilePage> {
   final nameController = TextEditingController();
-  final priceController = TextEditingController();
-  final descriptionController = TextEditingController();
+  final mobileController = TextEditingController();
   final TextEditingController imageUrlController = TextEditingController();
-  String? priceError;
+  String? get uid => FirebaseAuth.instance.currentUser!.uid;
   String? imageUrl;
   File? _selectedImage;
 
   @override
   void dispose() {
     nameController.dispose();
-    priceController.dispose();
-    descriptionController.dispose();
+    mobileController.dispose();
     imageUrlController.dispose();
     super.dispose();
   }
 
-  // Pick image from Camera
   Future<void> _pickImageFromCamera() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        imageUrl = null; // Reset URL if new image is selected
+        imageUrl = null;
       });
     }
   }
 
-  // Pick image from Gallery
   Future<void> _pickImageFromGallery() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        imageUrl = null; // Reset URL if new image is selected
+        imageUrl = null;
       });
     }
   }
-  
-
-
-
-  // Show URL input dialog
 
   Future<String?> uploadImageToFirebase(File imageFile) async {
     try {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
       final storageRef =
-          FirebaseStorage.instance.ref().child('product_images/$fileName.jpg');
+          FirebaseStorage.instance.ref().child('user_images/$fileName.jpg');
       final uploadTask = await storageRef.putFile(imageFile);
       final downloadURL = await storageRef.getDownloadURL();
       return downloadURL;
@@ -75,7 +65,6 @@ class _AdditemState extends State<Additem> {
       return null;
     }
   }
-
 
   void _showUrlInputDialog() {
     showDialog(
@@ -99,7 +88,7 @@ class _AdditemState extends State<Additem> {
               onPressed: () {
                 setState(() {
                   imageUrl = imageUrlController.text.trim();
-                  _selectedImage = null; // Reset image selection if URL is used
+                  _selectedImage = null;
                 });
                 Navigator.pop(context);
               },
@@ -113,82 +102,64 @@ class _AdditemState extends State<Additem> {
   @override
   void initState() {
     super.initState();
-
-    priceController.addListener(() {
-      final text = priceController.text.trim();
-      if (text.isEmpty || int.tryParse(text) != null) {
-        setState(() {
-          priceError = null;
-        });
-      } else {
-        setState(() {
-          priceError = "Price must be a number.";
-        });
-      }
-    });
   }
 
-  // Save the product to Firestore
   void _onSave() async {
-    final name = nameController.text.trim();
-    final price = priceController.text.trim();
-    final description = descriptionController.text.trim();
-    final user = FirebaseAuth.instance.currentUser;
+    print("Start saving user...");
+    print("UID: $uid");
 
+    final name = nameController.text.trim();
+    final mobile = mobileController.text.trim();
 
     String? finalImageUrl;
     if (_selectedImage != null) {
-      print(_selectedImage);
+      print("Uploading selected image...");
       finalImageUrl = await uploadImageToFirebase(_selectedImage!);
-
+      print("Image uploaded: $finalImageUrl");
     } else if (imageUrl != null && imageUrl!.isNotEmpty) {
       finalImageUrl = imageUrl;
     }
 
+    if (uid == null) return;
 
-
-    if (name.isEmpty ||
-        price.isEmpty ||
-        description.isEmpty ||
-        priceError != null) {
-      return;
-
+    Map<String, dynamic> updateData = {};
+    if (name.isNotEmpty) updateData['name'] = name;
+    if (mobile.isNotEmpty) updateData['mobile'] = mobile;
+    if (finalImageUrl != null && finalImageUrl.isNotEmpty) {
+      updateData['imageUrl'] = finalImageUrl;
     }
 
-    final product = ProductModel(
-      name: name,
-      price: int.parse(price),
-      description: description,
-      userId: user?.uid,
-      photoURL: finalImageUrl,
-    );
+    // ไม่แตะต้อง email เด็ดขาด
+
+    if (updateData.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("No changes to save."),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
 
     try {
-      final ref = await FirebaseFirestore.instance.collection('products').add({
-        ...product.toJson(),
-        'createdAt': FieldValue.serverTimestamp(),
-        'id': '',
-      });
-
-      await ref.update({'id': ref.id});
-      final productId = ref.id;
-      print("Product created with ID: $productId");
-
-      final newProduct = product.copyWith(id: productId);
+      final ref = FirebaseFirestore.instance.collection('users').doc(uid);
+      await ref.set(updateData, SetOptions(merge: true));
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Item added to Firebase!"),
+          content: Text("Profile updated!"),
           backgroundColor: Color.fromARGB(255, 0, 127, 85),
         ),
       );
       Navigator.of(context).pop();
-
-      nameController.clear();
-      priceController.clear();
-      descriptionController.clear();
     } catch (e) {
       print("Firebase error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to update: $e"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -197,7 +168,7 @@ class _AdditemState extends State<Additem> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Add Product"),
+        title: Text("Edit profile"),
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -260,22 +231,15 @@ class _AdditemState extends State<Additem> {
             ),
             SizedBox(height: 20),
             InputBox(
-              inputname: "Name",
-              labelname: "Product Name",
+              inputname: "Username",
+              labelname: "username",
               controller: nameController,
             ),
             SizedBox(height: 5),
             InputBox(
-              inputname: "Price",
-              labelname: "THB",
-              controller: priceController,
-              errorText: priceError,
-            ),
-            SizedBox(height: 5),
-            InputBox(
-              inputname: "Description",
-              labelname: "Description",
-              controller: descriptionController,
+              inputname: "Mobile",
+              labelname: "Phone number",
+              controller: mobileController,
             ),
             SizedBox(height: 20),
             SaveButton(onPressed: _onSave),
@@ -302,7 +266,8 @@ class SaveButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
         ),
       ),
-      child: Text("Save", style: TextStyle(fontSize: 18, color: Colors.white)),
+      child:
+          Text("Update", style: TextStyle(fontSize: 18, color: Colors.white)),
     );
   }
 }
@@ -332,8 +297,6 @@ class InputBox extends StatelessWidget {
           SizedBox(height: 5),
           TextField(
             controller: controller,
-            keyboardType:
-                labelname == "THB" ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
               hintText: labelname,
               hintStyle: TextStyle(color: Colors.grey),

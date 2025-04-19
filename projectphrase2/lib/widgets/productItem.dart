@@ -57,12 +57,11 @@ class ProductItem extends StatelessWidget {
                   height: 120,
                   width: 120,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      product.photoURL ??
-                          'assets/images/Softcover-Book-Mockup.jpg',
-                      fit: BoxFit.cover,
-                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    child: product.photoURL != null
+                        ? Image.network(product.photoURL!, fit: BoxFit.cover)
+                        : Image.asset('assets/images/Softcover-Book-Mockup.jpg',
+                            fit: BoxFit.cover),
                   ),
                 ),
               ),

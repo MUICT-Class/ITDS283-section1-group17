@@ -89,13 +89,6 @@ class _ProductDisplayState extends State<ProductDisplay> {
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              'Books & Stationeries',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-            ),
             const SizedBox(height: 0),
             Text(
               widget.product.name,
@@ -106,6 +99,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
             ),
             const SizedBox(height: 5),
             Text('\$${widget.product.price}',
+
                 style: TextStyle(
                   fontSize: 18,
                   color: Color.fromARGB(255, 0, 127, 85),

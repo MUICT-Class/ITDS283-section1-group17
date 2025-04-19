@@ -68,7 +68,7 @@ class _FavItemState extends State<FavItem> {
             physics: NeverScrollableScrollPhysics(),
             mainAxisSpacing: 0,
             crossAxisSpacing: 20,
-            childAspectRatio: 0.65,
+            childAspectRatio: 0.60,
             padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
             children: products
                 .map((product) => ProductDisplay(product: product))

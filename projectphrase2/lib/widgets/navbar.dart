@@ -28,8 +28,8 @@ class Navbar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.home_outlined,
-            size: 33,
+            Icons.home,
+            size: 30,
           ),
           label: '',
         ),
