@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projectphrase2/models/user_model.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/chat_page.dart';
+import 'package:projectphrase2/pages/chathistory_page.dart';
 import 'package:projectphrase2/pages/favItem.dart';
 import 'package:projectphrase2/pages/home_page.dart';
 import 'package:projectphrase2/pages/login_page.dart';
@@ -127,7 +128,7 @@ class _UsermanagePageState extends State<UsermanagePage> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Chat()));
+                                                      ChathistoryPage()));
                                         },
                                       ),
                                       SizedBox(

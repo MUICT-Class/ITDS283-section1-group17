@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:projectphrase2/models/product_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:projectphrase2/models/product_model.dart';
 
 class Additem extends StatefulWidget {
   const Additem({super.key});
@@ -24,6 +22,8 @@ class _AdditemState extends State<Additem> {
   String? imageUrl;
   File? _selectedImage;
 
+  String? currentUsername; // Variable to hold the current user's username
+
   @override
   void dispose() {
     nameController.dispose();
@@ -31,6 +31,23 @@ class _AdditemState extends State<Additem> {
     descriptionController.dispose();
     imageUrlController.dispose();
     super.dispose();
+  }
+
+  // Fetch the current user's username
+  Future<void> _fetchCurrentUser() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users') // Ensure you're fetching from the correct collection
+          .doc(user.uid)
+          .get();
+
+      if (userDoc.exists) {
+        setState(() {
+          currentUsername = userDoc.data()?['name'] ?? 'No Name';  // Fetch the 'name' field
+        });
+      }
+    }
   }
 
   // Pick image from Camera
@@ -108,6 +125,9 @@ class _AdditemState extends State<Additem> {
   void initState() {
     super.initState();
 
+    // Fetch the current user's username
+    _fetchCurrentUser();
+
     priceController.addListener(() {
       final text = priceController.text.trim();
       if (text.isEmpty || int.tryParse(text) != null) {
@@ -139,22 +159,15 @@ class _AdditemState extends State<Additem> {
     String? finalImageUrl;
     if (_selectedImage != null) {
       try {
-        print(_selectedImage);
-        print("Uploading image to Firebase...");
         finalImageUrl = await uploadImageToFirebase(_selectedImage!);
-        print("Image uploaded: $finalImageUrl");
       } catch (e) {
-        print("Image upload error: $e");
         finalImageUrl = null; // Handle error by not setting an image URL
       }
     } else if (imageUrl != null && imageUrl!.isNotEmpty) {
       finalImageUrl = imageUrl;
     }
 
-    if (name.isEmpty ||
-        price.isEmpty ||
-        description.isEmpty ||
-        priceError != null) {
+    if (name.isEmpty || price.isEmpty || description.isEmpty || priceError != null) {
       print("Missing fields or invalid price");
       return; // Exit early if any field is empty or price is invalid
     }
@@ -165,6 +178,7 @@ class _AdditemState extends State<Additem> {
       description: description,
       userId: user?.uid,
       photoURL: finalImageUrl,
+      username: currentUsername,  // Include the username here
     );
 
     try {
@@ -315,7 +329,7 @@ class InputBox extends StatelessWidget {
   final String inputname;
   final String labelname;
   final TextEditingController controller;
-  final String? errorText; //
+  final String? errorText;
 
   const InputBox({
     super.key,
@@ -341,7 +355,7 @@ class InputBox extends StatelessWidget {
             decoration: InputDecoration(
               hintText: labelname,
               hintStyle: TextStyle(color: Colors.grey),
-              errorText: errorText, // 👈 show red error label here
+              errorText: errorText, // Show red error label here
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: Colors.grey, width: 1),

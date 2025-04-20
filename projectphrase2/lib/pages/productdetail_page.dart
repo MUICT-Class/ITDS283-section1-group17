@@ -82,7 +82,9 @@ class _DisplayproductState extends State<ProductdetailPage> {
             child: IconButton(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChatHistory()),
+                MaterialPageRoute(
+                  builder: (context) => ChathistoryPage(),
+                ),
               ),
               icon: Icon(
                 Icons.mail,
@@ -109,8 +111,9 @@ class _DisplayproductState extends State<ProductdetailPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
                         child: Image.network(
-                            product.photoURL ?? 'assets/images/default.jpg',
-                            fit: BoxFit.cover),
+                          product.photoURL ?? 'assets/images/default.jpg',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -123,7 +126,9 @@ class _DisplayproductState extends State<ProductdetailPage> {
                       Text(
                         product.name,
                         style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w400),
+                          fontSize: 30,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                       GestureDetector(
                         onTap: toggleFavorite,
@@ -146,11 +151,11 @@ class _DisplayproductState extends State<ProductdetailPage> {
                       Text(
                         'Description',
                         style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w400),
+                          fontSize: 17,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
+                      SizedBox(height: 5),
                       Text(
                         product.description,
                         style: TextStyle(fontSize: 14),
@@ -186,15 +191,21 @@ class _DisplayproductState extends State<ProductdetailPage> {
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Chat()),
+                        MaterialPageRoute(
+                          builder: (context) => Chat(
+                            receiverID: product.userId ?? "Unknown ID",
+                          ),
+                        ),
                       ),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(90),
                         ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 14,
+                        ),
                         child: Row(
                           children: [
                             Text(
