@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:projectphrase2/models/product_model.dart';
@@ -8,6 +9,24 @@ class ProductItem extends StatelessWidget {
   final VoidCallback? onDelete; // Callback for delete action
 
   const ProductItem({required this.product, this.onDelete, super.key});
+
+  Future<void> _deleteProduct(BuildContext context) async {
+    if (product.id == null) return;
+    try {
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(product.id)
+          .delete();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Product deleted!'), backgroundColor: Colors.green),
+      );
+      if (onDelete != null) onDelete!();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
   
 
   @override
@@ -24,9 +43,7 @@ class ProductItem extends StatelessWidget {
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {
-          if (onDelete != null) {
-            onDelete!(); // Call the delete callback if provided
-          }
+          _deleteProduct(context);
         }),
         children: [
           SlidableAction(

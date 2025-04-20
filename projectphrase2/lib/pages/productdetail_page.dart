@@ -116,14 +116,21 @@ class _DisplayproductState extends State<ProductdetailPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30, 10, 30, 20),
+                  padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        product.name,
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w400),
+                      Expanded(
+                        child: Text(
+                          product.name,
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w400),
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow:
+                              TextOverflow.ellipsis, // or .visible if you want
+                        ),
                       ),
                       GestureDetector(
                         onTap: toggleFavorite,

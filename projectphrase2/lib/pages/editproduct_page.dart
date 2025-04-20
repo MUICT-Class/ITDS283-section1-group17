@@ -107,19 +107,19 @@ class _EditProductPageState extends State<EditProductPage> {
   final price = priceController.text.trim();
   final description = descriptionController.text.trim();
 
-  String? finalImageUrl;
+  String? finalPhotoUrl;
   if (_selectedImage != null) {
-    finalImageUrl = await uploadImageToFirebase(_selectedImage!);
+    finalPhotoUrl = await uploadImageToFirebase(_selectedImage!);
   } else if (imageUrl != null && imageUrl!.isNotEmpty) {
-    finalImageUrl = imageUrl;
+    finalPhotoUrl = imageUrl;
   }
 
   Map<String, dynamic> updateData = {};
   if (name.isNotEmpty) updateData['name'] = name;
   if (price.isNotEmpty) updateData['price'] = int.tryParse(price) ?? 0;
   if (description.isNotEmpty) updateData['description'] = description;
-  if (finalImageUrl != null && finalImageUrl.isNotEmpty) {
-    updateData['photoURL'] = finalImageUrl; // <-- Make sure this key matches your model
+  if (finalPhotoUrl != null && finalPhotoUrl.isNotEmpty) {
+    updateData['photoURL'] = finalPhotoUrl; // <-- Make sure this key matches your model
   }
 
   if (updateData.isEmpty) {
