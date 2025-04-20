@@ -27,15 +27,18 @@ class ProductModel {
   // Convert Firestore data -> ProductModel
   factory ProductModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return ProductModel(
-      id: id, // เพิ่มการรับค่า id จาก Firestore
-      name: json['name'],
-      price: int.tryParse(json['price'].toString()) ?? 0,
-      description: json['description'],
+      id: id,
+      name: json['name'] ?? '',
+      price: json['price'] is int
+          ? json['price']
+          : (json['price'] is String
+              ? int.tryParse(json['price']) ?? 0
+              : (json['price'] as num).toInt()), // Convert double to int
+      description: json['description'] ?? '',
       photoURL: json['photoURL'],
       userId: json['userId'],
     );
   }
-
   // Convert ProductModel -> Firestore data
   Map<String, dynamic> toJson() {
     return {

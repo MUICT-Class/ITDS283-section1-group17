@@ -319,12 +319,11 @@ class SaveButton extends StatelessWidget {
     );
   }
 }
-
 class InputBox extends StatelessWidget {
   final String inputname;
   final String labelname;
   final TextEditingController controller;
-  final String? errorText; //
+  final String? errorText;
 
   const InputBox({
     super.key,
@@ -345,12 +344,13 @@ class InputBox extends StatelessWidget {
           SizedBox(height: 5),
           TextField(
             controller: controller,
+            maxLength: inputname == "Name" ? 25 : null, // Limit to 25 chars for Name only
             keyboardType:
                 labelname == "THB" ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
               hintText: labelname,
               hintStyle: TextStyle(color: Colors.grey),
-              errorText: errorText, // 👈 show red error label here
+              errorText: errorText,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(color: Colors.grey, width: 1),

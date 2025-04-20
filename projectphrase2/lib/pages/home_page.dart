@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                     physics: NeverScrollableScrollPhysics(),
                     mainAxisSpacing: 0,
                     crossAxisSpacing: 20,
-                    childAspectRatio: 0.6,
+                    childAspectRatio: 0.60,
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     children: products
                         .map((product) => ProductDisplay(product: product))
