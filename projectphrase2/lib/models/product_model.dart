@@ -6,14 +6,13 @@ class ProductModel {
   final String? photoURL;
   final String? userId;
 
-  ProductModel({
-    this.id,
-    required this.name,
-    required this.price,
-    required this.description,
-    this.photoURL,
-    this.userId
-  });
+  ProductModel(
+      {this.id,
+      required this.name,
+      required this.price,
+      required this.description,
+      this.photoURL,
+      this.userId});
 
   ProductModel copyWith({String? id}) {
     return ProductModel(
@@ -30,7 +29,7 @@ class ProductModel {
     return ProductModel(
       id: id, // เพิ่มการรับค่า id จาก Firestore
       name: json['name'],
-      price: json['price'],
+      price: int.tryParse(json['price'].toString()) ?? 0,
       description: json['description'],
       photoURL: json['photoURL'],
       userId: json['userId'],

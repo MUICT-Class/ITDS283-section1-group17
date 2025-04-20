@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/chat_page.dart';
+import 'package:projectphrase2/pages/chathistory_page.dart';
 import 'package:projectphrase2/pages/favItem.dart';
 import 'package:projectphrase2/pages/usermanage_page.dart';
 import 'package:projectphrase2/widgets/navbar.dart';
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     } else if (index == 2) {
       Navigator.push(context, MaterialPageRoute(builder: (_) => Additem()));
     } else if (index == 3) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => Chat()));
+      Navigator.push(context, MaterialPageRoute(builder: (_) => ChatHistory()));
     } else if (index == 4) {
       Navigator.push(
           context, MaterialPageRoute(builder: (_) => UsermanagePage()));

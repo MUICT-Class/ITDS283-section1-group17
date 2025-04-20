@@ -120,10 +120,15 @@ class _DisplayproductState extends State<ProductdetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        product.name,
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w400),
+                      Expanded(
+                        child: Text(
+                          product.name,
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w400),
+                          softWrap: true,
+                          overflow: TextOverflow.visible,
+                          maxLines: 2,
+                        ),
                       ),
                       GestureDetector(
                         onTap: toggleFavorite,
@@ -184,10 +189,28 @@ class _DisplayproductState extends State<ProductdetailPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Chat()),
-                      ),
+                      onTap: () {
+                        final sellerId = product.userId;
+                        final currentUserId =
+                            FirebaseAuth.instance.currentUser?.uid;
+                        print(sellerId);
+
+                        if (sellerId != null && currentUserId != sellerId) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ChatPage(receiverId: sellerId),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content:
+                                    Text("You are the owner of this product.")),
+                          );
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,

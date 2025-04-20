@@ -100,7 +100,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
             Text(
               widget.product.name,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
