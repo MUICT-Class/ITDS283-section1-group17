@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projectphrase2/models/product_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
@@ -201,6 +202,14 @@ class _AdditemState extends State<Additem> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/arrow_left_icon.svg',
+            width: 30,
+            height: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text("Add Product"),
         backgroundColor: Colors.white,
       ),
@@ -343,7 +352,7 @@ class InputBox extends StatelessWidget {
               hintStyle: TextStyle(color: Colors.grey),
               errorText: errorText, // 👈 show red error label here
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(color: Colors.grey, width: 1),
               ),
               focusedBorder: OutlineInputBorder(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_svg/svg.dart';
 import 'chat_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -34,6 +35,14 @@ class ChatHistoryState extends State<ChatHistory> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/arrow_left_icon.svg',
+            width: 30,
+            height: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text("Chat History", style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
@@ -74,7 +83,7 @@ class ChatHistoryState extends State<ChatHistory> {
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.withOpacity(0.3),
                       blurRadius: 5,
                       offset: Offset(0, 3),
                     ),

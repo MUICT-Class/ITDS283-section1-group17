@@ -70,9 +70,6 @@ class Product extends StatelessWidget {
                     // go back to home
                   },
                   child: Icon(Icons.home, color: Color(0xFF389B72)),
-                  shape: CircleBorder(
-                    side: BorderSide(color: Color(0xFF389B72)),
-                  ),
                 ),
               )),
           Positioned(

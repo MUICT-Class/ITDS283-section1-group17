@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projectphrase2/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projectphrase2/services/database_service.dart';
@@ -47,10 +48,20 @@ class _ProfilecardState extends State<Profilecard> {
       return Center(child: CircularProgressIndicator());
     }
 
-    return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Colors.white,
-        elevation: 4,
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
         child: Padding(
             padding: const EdgeInsets.all(18),
             child: Column(
@@ -69,9 +80,10 @@ class _ProfilecardState extends State<Profilecard> {
                     IconButton(
                       onPressed: () => Navigator.push(context,
                           MaterialPageRoute(builder: (_) => EditprofilePage())),
-                      icon: Icon(
-                        Icons.edit,
-                        size: 20,
+                      icon: SvgPicture.asset(
+                        'assets/icons/edit_icon.svg',
+                        width: 20,
+                        height: 20,
                       ),
                     ),
                   ],

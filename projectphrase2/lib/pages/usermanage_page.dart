@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projectphrase2/models/user_model.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/chat_page.dart';
@@ -51,6 +52,14 @@ class _UsermanagePageState extends State<UsermanagePage> {
             extendBodyBehindAppBar: true,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
+              leading: IconButton(
+                icon: SvgPicture.asset(
+                  'assets/icons/arrow_left_icon.svg',
+                  width: 30,
+                  height: 30,
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
               elevation: 0,
             ),
             body: Container(
@@ -87,8 +96,10 @@ class _UsermanagePageState extends State<UsermanagePage> {
                                       ),
                                       Itembar(
                                         text: "Favorite Item",
-                                        icon: Icon(
-                                          Icons.favorite_border,
+                                        icon: SvgPicture.asset(
+                                          'assets/icons/heart_icon.svg',
+                                          width: 25,
+                                          height: 25,
                                           color: Color(0xFF007F55),
                                         ),
                                         onTap: () {
@@ -104,8 +115,10 @@ class _UsermanagePageState extends State<UsermanagePage> {
                                       ),
                                       Itembar(
                                         text: "Product Management",
-                                        icon: Icon(
-                                          Icons.inventory_2_outlined,
+                                        icon: SvgPicture.asset(
+                                          'assets/icons/product_manage.svg',
+                                          width: 25,
+                                          height: 25,
                                           color: Color(0xFF007F55),
                                         ),
                                         onTap: () {
@@ -121,8 +134,12 @@ class _UsermanagePageState extends State<UsermanagePage> {
                                       ),
                                       Itembar(
                                         text: "Chat History",
-                                        icon: Icon(Icons.chat_bubble_outline,
-                                            color: Color(0xFF007F55)),
+                                        icon: SvgPicture.asset(
+                                          'assets/icons/chat_icon.svg',
+                                          width: 25,
+                                          height: 25,
+                                          color: Color(0xFF007F55),
+                                        ),
                                         onTap: () {
                                           Navigator.push(
                                               context,
@@ -189,7 +206,7 @@ class _UsermanagePageState extends State<UsermanagePage> {
 class Itembar extends StatelessWidget {
   final String text;
   final Color? color;
-  final Icon? icon;
+  final Widget? icon;
   final VoidCallback onTap;
   final bool? none;
 
@@ -203,10 +220,20 @@ class Itembar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Colors.white,
-        elevation: 4,
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(20),
@@ -233,8 +260,10 @@ class Itembar extends StatelessWidget {
                     ),
                     none == true
                         ? SizedBox.shrink() // hides the icon when none is true
-                        : Icon(
-                            Icons.arrow_forward_ios,
+                        : SvgPicture.asset(
+                            'assets/icons/arrow_right_icon.svg',
+                            width: 25,
+                            height: 25,
                             color: Color(0xFF007F55),
                           ),
                   ],

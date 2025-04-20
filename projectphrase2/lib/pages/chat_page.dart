@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverId;
@@ -36,6 +39,83 @@ class _ChatPageState extends State<ChatPage> {
         });
       }
     });
+  }
+
+  Future<void> _pickAndUploadImage() async {
+    final picker = ImagePicker();
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Take Photo'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    _uploadImage(File(pickedFile.path));
+                  }
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    _uploadImage(File(pickedFile.path));
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _uploadImage(File file) async {
+    final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child('chat_images')
+        .child('$senderId/$fileName.jpg');
+
+    await storageRef.putFile(file);
+    final imageUrl = await storageRef.getDownloadURL();
+
+    final message = {
+      'text': '',
+      'imageUrl': imageUrl,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'sender': senderId,
+      'receiver': widget.receiverId,
+    };
+
+    messageRef.push().set(message);
+    FirebaseDatabase.instance
+        .ref("messages/${widget.receiverId}/$senderId")
+        .push()
+        .set(message);
+
+    final chatSummary = {
+      'lastMessage': '[Image]',
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    };
+
+    FirebaseDatabase.instance
+        .ref("chatHistory/$senderId/${widget.receiverId}")
+        .set(chatSummary);
+    FirebaseDatabase.instance
+        .ref("chatHistory/${widget.receiverId}/$senderId")
+        .set(chatSummary);
   }
 
   void _sendMessage() {
@@ -123,6 +203,7 @@ class _ChatPageState extends State<ChatPage> {
                       'text': value['text'] ?? '',
                       'timestamp': value['timestamp'] ?? 0,
                       'sender': value['sender'] ?? '',
+                      'imageUrl': value['imageUrl'],
                     };
                   }).toList();
 
@@ -139,20 +220,36 @@ class _ChatPageState extends State<ChatPage> {
                       return Align(
                         alignment:
                             isMe ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          padding: EdgeInsets.all(16),
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.7,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isMe
-                                ? Colors.grey[300]
-                                : Color.fromARGB(255, 146, 207, 182),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Text(message['text']),
-                        ),
+                        child: message['imageUrl'] != null
+                            ? Container(
+                                margin: EdgeInsets.only(bottom: 20),
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(message['imageUrl']),
+                                ),
+                              )
+                            : Container(
+                                margin: EdgeInsets.only(bottom: 20),
+                                padding: EdgeInsets.all(16),
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isMe
+                                      ? Colors.grey[300]
+                                      : Color.fromARGB(255, 146, 207, 182),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: Text(
+                                  message['text'],
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ),
                       );
                     },
                   );
@@ -170,7 +267,10 @@ class _ChatPageState extends State<ChatPage> {
                 children: [
                   CircleAvatar(
                     backgroundColor: Color(0xFF389B72),
-                    child: Icon(Icons.add, color: Colors.white),
+                    child: IconButton(
+                      icon: Icon(Icons.add, color: Colors.white),
+                      onPressed: _pickAndUploadImage,
+                    ),
                   ),
                   SizedBox(width: 10),
                   Expanded(

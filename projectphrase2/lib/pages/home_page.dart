@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/chat_page.dart';
 import 'package:projectphrase2/pages/chathistory_page.dart';
@@ -53,22 +54,22 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(25, 60, 25, 20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Text(
-                        //   'Marketplace for',
-                        //   style: TextStyle(
-                        //     fontSize: 16,
-                        //     fontWeight: FontWeight.w500,
-                        //   ),
-                        // ),
                         Text(
-                          'Home',
+                          'MU',
                           style: TextStyle(
                             fontSize: 42,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          'Marketplace',
+                          style: TextStyle(
+                            fontSize: 20,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -98,12 +99,17 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                       ),
-                      // IconButton(
-                      //   icon: Icon(Icons.search),
-                      //   onPressed: () => setState(() {
-                      //     print("Search ${controllerSearch.text}");
-                      //   }), // ✅ กดแล้วอัปเดต
-                      // ),
+                      IconButton(
+                        icon: SvgPicture.asset(
+                          'assets/icons/search_icon.svg',
+                          width: 30,
+                          height: 30,
+                          color: Color(0xFF007F55),
+                        ),
+                        onPressed: () => setState(() {
+                          print("Search ${controllerSearch.text}");
+                        }),
+                      ),
                     ],
                   ),
                 ),
@@ -115,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                 child: Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    'Popular Items',
+                    'Items',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ),

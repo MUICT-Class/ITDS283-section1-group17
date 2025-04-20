@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/svg.dart';
 import '../models/product_model.dart';
 import '../widgets/product_display.dart';
 
@@ -45,6 +46,14 @@ class _FavItemState extends State<FavItem> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/arrow_left_icon.svg',
+            width: 30,
+            height: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text("Favorite Items"),
       ),
       body: FutureBuilder<List<ProductModel>>(
@@ -68,7 +77,7 @@ class _FavItemState extends State<FavItem> {
             physics: NeverScrollableScrollPhysics(),
             mainAxisSpacing: 0,
             crossAxisSpacing: 20,
-            childAspectRatio: 0.65,
+            childAspectRatio: 0.6,
             padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
             children: products
                 .map((product) => ProductDisplay(product: product))

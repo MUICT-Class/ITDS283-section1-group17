@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projectphrase2/models/product_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projectphrase2/pages/chat_page.dart';
 import 'package:projectphrase2/pages/chathistory_page.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProductdetailPage extends StatefulWidget {
   final ProductModel product;
@@ -57,6 +59,7 @@ class _DisplayproductState extends State<ProductdetailPage> {
       print('liked');
     }
 
+    HapticFeedback.lightImpact();
     setState(() {
       isFavorite = !isFavorite;
     });
@@ -73,7 +76,11 @@ class _DisplayproductState extends State<ProductdetailPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_outlined),
+          icon: SvgPicture.asset(
+            'assets/icons/arrow_left_icon.svg',
+            width: 30,
+            height: 30,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -84,10 +91,11 @@ class _DisplayproductState extends State<ProductdetailPage> {
                 context,
                 MaterialPageRoute(builder: (context) => ChatHistory()),
               ),
-              icon: Icon(
-                Icons.mail,
+              icon: SvgPicture.asset(
+                'assets/icons/mail_icon.svg',
+                width: 30,
+                height: 30,
                 color: Color(0xFF389B72),
-                size: 30,
               ),
             ),
           )
@@ -109,7 +117,8 @@ class _DisplayproductState extends State<ProductdetailPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
                         child: Image.network(
-                            product.photoURL ?? 'assets/images/default.jpg',
+                            product.photoURL ??
+                                'assets/images/Softcover-Book-Mockup.jpg',
                             fit: BoxFit.cover),
                       ),
                     ),
@@ -132,11 +141,12 @@ class _DisplayproductState extends State<ProductdetailPage> {
                       ),
                       GestureDetector(
                         onTap: toggleFavorite,
-                        child: Icon(
+                        child: SvgPicture.asset(
                           isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border_outlined,
-                          size: 30,
+                              ? 'assets/icons/solid_heart_icon.svg'
+                              : 'assets/icons/heart_icon.svg',
+                          width: 30,
+                          height: 30,
                           color: isFavorite ? Colors.red : Colors.grey,
                         ),
                       ),

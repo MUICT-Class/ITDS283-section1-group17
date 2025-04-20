@@ -40,10 +40,19 @@ class ProductItem extends StatelessWidget {
     }
 
     print('🧩 Productitem: ${product.name} | ID: ${product.id}');
-    return Card(
-      color: Color.fromARGB(255, 213, 213, 213),
-      shape: RoundedRectangleBorder(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white70,
         borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
       child: Container(
         constraints: BoxConstraints(minHeight: 160),
@@ -110,4 +119,3 @@ class ProductItem extends StatelessWidget {
     );
   }
 }
-

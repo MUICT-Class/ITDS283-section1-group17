@@ -99,16 +99,10 @@ class TextFieldSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return TextField(
+      textAlign: TextAlign.right,
       controller: textEditingController,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-          prefixIcon: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: onSearchPressed ??
-                () {
-                  print('Search icon pressed but no callback assigned');
-                },
-          ),
           hintText: hintText,
           hintStyle: const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
           border: OutlineInputBorder(

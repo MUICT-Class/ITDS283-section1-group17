@@ -1,9 +1,11 @@
 // ProductDisplay widget on HomePage
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projectphrase2/models/product_model.dart';
 import 'package:projectphrase2/pages/productdetail_page.dart';
+import 'package:flutter_svg/svg.dart';
 
 // Import Displayproduct page
 class ProductDisplay extends StatefulWidget {
@@ -66,6 +68,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
 
                       return GestureDetector(
                         onTap: () async {
+                          HapticFeedback.lightImpact();
                           final favRef = FirebaseFirestore.instance
                               .collection('users')
                               .doc(user?.uid)
@@ -81,12 +84,13 @@ class _ProductDisplayState extends State<ProductDisplay> {
                         child: CircleAvatar(
                           radius: 18,
                           backgroundColor: Colors.white,
-                          child: Icon(
+                          child: SvgPicture.asset(
                             isFavorite
-                                ? Icons.favorite
-                                : Icons.favorite_border_outlined,
+                                ? 'assets/icons/solid_heart_icon.svg'
+                                : 'assets/icons/heart_icon.svg',
+                            width: 18,
+                            height: 18,
                             color: isFavorite ? Colors.red : Colors.grey,
-                            size: 18,
                           ),
                         ),
                       );
@@ -105,12 +109,14 @@ class _ProductDisplayState extends State<ProductDisplay> {
               ),
             ),
             const SizedBox(height: 5),
-            Text('\$${widget.product.price}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color.fromARGB(255, 0, 127, 85),
-                  fontWeight: FontWeight.w600,
-                )),
+            Text(
+              '\$${widget.product.price}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color.fromARGB(255, 0, 127, 85),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
       ),
