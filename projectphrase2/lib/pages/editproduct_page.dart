@@ -6,6 +6,7 @@ import 'package:projectphrase2/models/product_model.dart'; // Assuming you have 
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:projectphrase2/pages/loading_page.dart'; // Added import for LoadingPage
 
 class EditProductPage extends StatefulWidget {
   final String productId;
@@ -23,6 +24,7 @@ class _EditProductPageState extends State<EditProductPage> {
   String? imageUrl;
   File? _selectedImage;
   String? productId;
+  bool _isLoading = false; // Added loading state
 
   @override
   void dispose() {
@@ -133,6 +135,15 @@ class _EditProductPageState extends State<EditProductPage> {
       return;
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const LoadingPage(),
+    );
+
     try {
       await FirebaseFirestore.instance
           .collection('products')
@@ -143,12 +154,20 @@ class _EditProductPageState extends State<EditProductPage> {
         SnackBar(
             content: Text("Product updated!"), backgroundColor: Colors.green),
       );
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); // Close loading
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.pop(context); // Go back to the previous page
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text("Failed to update: $e"), backgroundColor: Colors.red),
       );
+      Navigator.of(context).pop(); // Close loading
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -290,11 +309,11 @@ class InputBox extends StatelessWidget {
               hintStyle: TextStyle(color: Colors.grey),
               errorText: errorText, // 👈 show red error label here
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(color: Colors.grey, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(25),
                 borderSide:
                     BorderSide(color: const Color.fromARGB(255, 0, 127, 85)),
               ),

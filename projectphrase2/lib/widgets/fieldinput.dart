@@ -99,7 +99,7 @@ class TextFieldSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return TextField(
-      textAlign: TextAlign.right,
+      textAlign: TextAlign.left,
       controller: textEditingController,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),

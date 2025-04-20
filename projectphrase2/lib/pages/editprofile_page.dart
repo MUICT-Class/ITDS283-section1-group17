@@ -6,6 +6,7 @@ import 'package:projectphrase2/models/user_model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:projectphrase2/pages/loading_page.dart';
 
 class EditprofilePage extends StatefulWidget {
   const EditprofilePage({super.key});
@@ -21,6 +22,7 @@ class editprofileState extends State<EditprofilePage> {
   String? get uid => FirebaseAuth.instance.currentUser!.uid;
   String? imageUrl;
   File? _selectedImage;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -105,6 +107,12 @@ class editprofileState extends State<EditprofilePage> {
   }
 
   void _onSave() async {
+    showDialog(
+      context: context,
+      builder: (context) => LoadingPage(),
+    );
+
+    setState(() => _isLoading = true);
     print("Start saving user...");
     print("UID: $uid");
 
@@ -132,6 +140,10 @@ class editprofileState extends State<EditprofilePage> {
     // ไม่แตะต้อง email เด็ดขาด
 
     if (updateData.isEmpty) {
+      Navigator.of(context).pop(); // ปิดหน้า Loading
+      setState(() {
+        _isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("No changes to save."),
@@ -145,15 +157,23 @@ class editprofileState extends State<EditprofilePage> {
       final ref = FirebaseFirestore.instance.collection('users').doc(uid);
       await ref.set(updateData, SetOptions(merge: true));
 
+      Navigator.of(context).pop(); // ปิดหน้า Loading
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.pop(context); // กลับหน้าก่อนหน้า
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Profile updated!"),
           backgroundColor: Color.fromARGB(255, 0, 127, 85),
         ),
       );
-      Navigator.of(context).pop();
     } catch (e) {
       print("Firebase error: $e");
+      Navigator.of(context).pop(); // ปิดหน้า Loading
+      setState(() {
+        _isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Failed to update: $e"),
@@ -302,11 +322,11 @@ class InputBox extends StatelessWidget {
               hintStyle: TextStyle(color: Colors.grey),
               errorText: errorText, // 👈 show red error label here
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(color: Colors.grey, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(25),
                 borderSide:
                     BorderSide(color: const Color.fromARGB(255, 0, 127, 85)),
               ),

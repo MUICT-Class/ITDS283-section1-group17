@@ -7,9 +7,10 @@ class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Center(
         child: LoadingAnimationWidget.waveDots(
-          color: Color.fromARGB(178, 0, 127, 85),
+          color: Color.fromARGB(255, 255, 255, 255),
           size: 150,
         ),
       ),

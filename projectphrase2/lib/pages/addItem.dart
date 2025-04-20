@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:projectphrase2/pages/loading_page.dart';
 
 class Additem extends StatefulWidget {
   const Additem({super.key});
@@ -24,6 +25,7 @@ class _AdditemState extends State<Additem> {
   String? priceError;
   String? imageUrl;
   File? _selectedImage;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -137,6 +139,15 @@ class _AdditemState extends State<Additem> {
       return; // Exit early if the price is invalid
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const LoadingPage(),
+    );
+
     String? finalImageUrl;
     if (_selectedImage != null) {
       try {
@@ -157,6 +168,10 @@ class _AdditemState extends State<Additem> {
         description.isEmpty ||
         priceError != null) {
       print("Missing fields or invalid price");
+      Navigator.of(context).pop(); // ปิดหน้า Loading
+      setState(() {
+        _isLoading = false;
+      });
       return; // Exit early if any field is empty or price is invalid
     }
 
@@ -187,13 +202,22 @@ class _AdditemState extends State<Additem> {
           backgroundColor: Color.fromARGB(255, 0, 127, 85),
         ),
       );
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); // ปิดหน้า Loading
+      setState(() {
+        _isLoading = false;
+      });
+
+      Navigator.pop(context); // กลับไปหน้าก่อนหน้า
 
       nameController.clear();
       priceController.clear();
       descriptionController.clear();
     } catch (e) {
       print("Firebase error: $e");
+      Navigator.of(context).pop(); // ปิดหน้า Loading
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -319,6 +343,7 @@ class SaveButton extends StatelessWidget {
     );
   }
 }
+
 class InputBox extends StatelessWidget {
   final String inputname;
   final String labelname;
@@ -344,7 +369,9 @@ class InputBox extends StatelessWidget {
           SizedBox(height: 5),
           TextField(
             controller: controller,
-            maxLength: inputname == "Name" ? 25 : null, // Limit to 25 chars for Name only
+            maxLength: inputname == "Name"
+                ? 25
+                : null, // Limit to 25 chars for Name only
             keyboardType:
                 labelname == "THB" ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
@@ -356,7 +383,7 @@ class InputBox extends StatelessWidget {
                 borderSide: BorderSide(color: Colors.grey, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(25),
                 borderSide:
                     BorderSide(color: const Color.fromARGB(255, 0, 127, 85)),
               ),

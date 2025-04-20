@@ -58,6 +58,8 @@ class ProductItem extends StatelessWidget {
             ),
             backgroundColor: Colors.grey,
             foregroundColor: Colors.white,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
             icon: Icons.edit_rounded,
           ),
           SlidableAction(
@@ -68,6 +70,9 @@ class ProductItem extends StatelessWidget {
             },
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                bottomRight: Radius.circular(20)),
             icon: Icons.delete,
           ),
         ],
@@ -86,67 +91,58 @@ class ProductItem extends StatelessWidget {
             ),
           ],
         ),
-        child: Container(
-          constraints: BoxConstraints(minHeight: 160),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(0),
-                  child: SizedBox(
-                    height: 120,
-                    width: 120,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: product.photoURL != null
-                          ? Image.network(product.photoURL!, fit: BoxFit.cover)
-                          : Image.asset(
-                              'assets/images/Softcover-Book-Mockup.jpg',
-                              fit: BoxFit.cover),
-                    ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.zero,
+                child: SizedBox(
+                  height: 120,
+                  width: 120,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: imageWidget,
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Name: ${product.name}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Price: ${product.price}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Description: ${product.description}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          ),
-                          Text(
-                            'ID: ${product.id ?? "null"}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 10, color: Colors.grey),
-                          ),
-                        ],
-                      )),
-                )
-              ],
-            ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Name: ${product.name}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Price: ${product.price}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Description: ${product.description}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                      Text(
+                        'ID: ${product.id ?? "null"}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

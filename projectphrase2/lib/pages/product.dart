@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projectphrase2/models/product_model.dart';
 import 'package:projectphrase2/pages/addItem.dart';
 import 'package:projectphrase2/pages/home_page.dart';
@@ -86,8 +87,13 @@ class Product extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Additem()));
                   // add new product
                 },
-                child: Icon(Icons.add, color: Colors.white, size: 32),
                 shape: const CircleBorder(),
+                child: SvgPicture.asset(
+                  'assets/icons/add_icon.svg',
+                  color: Colors.white,
+                  height: 32,
+                  width: 32,
+                ),
               ),
             ),
           ),

@@ -125,10 +125,9 @@ class _DisplayproductState extends State<ProductdetailPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                  padding: EdgeInsets.fromLTRB(30, 10, 30, 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Text(
@@ -138,11 +137,6 @@ class _DisplayproductState extends State<ProductdetailPage> {
                           softWrap: true,
                           overflow: TextOverflow.visible,
                           maxLines: 2,
-                              fontSize: 30, fontWeight: FontWeight.w400),
-                          softWrap: true,
-                          maxLines: 2,
-                          overflow:
-                              TextOverflow.ellipsis, // or .visible if you want
                         ),
                       ),
                       GestureDetector(
@@ -181,6 +175,7 @@ class _DisplayproductState extends State<ProductdetailPage> {
                 ),
               ],
             ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
