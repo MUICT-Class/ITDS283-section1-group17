@@ -96,87 +96,55 @@ class _EditProductPageState extends State<EditProductPage> {
   }
 
   void _onSave() async {
-    print("Start saving product...");
-    print("Product ID: $productId");
-
-    final name = nameController.text.trim();
-    final price = priceController.text.trim();
-    final description = descriptionController.text.trim();
-
-    String? finalImageUrl;
-    if (_selectedImage != null) {
-      print("Uploading selected image...");
-      finalImageUrl = await uploadImageToFirebase(_selectedImage!);
-      print("Image uploaded: $finalImageUrl");
-    } else if (imageUrl != null && imageUrl!.isNotEmpty) {
-      finalImageUrl = imageUrl;
-    }
-
-    if (productId == null || productId!.isEmpty) {
-      print("Error: Product ID is null or empty.");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Invalid product ID."),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    Map<String, dynamic> updateData = {};
-    if (name.isNotEmpty) updateData['name'] = name;
-    if (price.isNotEmpty) {
-      try {
-        updateData['price'] =
-            int.parse(price); // Ensure price is stored as an integer
-      } catch (e) {
-        print("Error parsing price: $e");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Invalid price format."),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-    }
-    if (description.isNotEmpty) updateData['description'] = description;
-    if (finalImageUrl != null && finalImageUrl.isNotEmpty) {
-      updateData['imageUrl'] = finalImageUrl;
-    }
-
-    if (updateData.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("No changes to save."),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
-
-    try {
-      final ref =
-          FirebaseFirestore.instance.collection('products').doc(productId);
-      await ref.set(updateData, SetOptions(merge: true));
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Product updated!"),
-          backgroundColor: Color.fromARGB(255, 0, 127, 85),
-        ),
-      );
-      Navigator.of(context).pop();
-    } catch (e) {
-      print("Firebase error: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Failed to update: $e"),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+  if (productId == null || productId!.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Invalid product ID."), backgroundColor: Colors.red),
+    );
+    return;
   }
+
+  final name = nameController.text.trim();
+  final price = priceController.text.trim();
+  final description = descriptionController.text.trim();
+
+  String? finalImageUrl;
+  if (_selectedImage != null) {
+    finalImageUrl = await uploadImageToFirebase(_selectedImage!);
+  } else if (imageUrl != null && imageUrl!.isNotEmpty) {
+    finalImageUrl = imageUrl;
+  }
+
+  Map<String, dynamic> updateData = {};
+  if (name.isNotEmpty) updateData['name'] = name;
+  if (price.isNotEmpty) updateData['price'] = int.tryParse(price) ?? 0;
+  if (description.isNotEmpty) updateData['description'] = description;
+  if (finalImageUrl != null && finalImageUrl.isNotEmpty) {
+    updateData['photoURL'] = finalImageUrl; // <-- Make sure this key matches your model
+  }
+
+  if (updateData.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("No changes to save."), backgroundColor: Colors.orange),
+    );
+    return;
+  }
+
+  try {
+    await FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId)
+        .update(updateData); // Use update to only change provided fields
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Product updated!"), backgroundColor: Colors.green),
+    );
+    Navigator.of(context).pop();
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Failed to update: $e"), backgroundColor: Colors.red),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
