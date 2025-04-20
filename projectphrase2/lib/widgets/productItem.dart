@@ -12,7 +12,6 @@ class ProductItem extends StatelessWidget {
 
     // Choose image source
     Widget imageWidget;
-
     if (product.photoURL != null && product.photoURL!.startsWith('assets/')) {
       imageWidget = Image.asset(
         product.photoURL!,
