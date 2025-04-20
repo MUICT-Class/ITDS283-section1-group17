@@ -12,6 +12,7 @@ class TextFieldInLog extends StatelessWidget {
     this.isPass = false,
     required this.hintText,
     required this.icon,
+    required bool obscureText,
   });
 
   @override
@@ -21,10 +22,12 @@ class TextFieldInLog extends StatelessWidget {
       obscureText: isPass,
       controller: textEditingController,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           prefixIcon: Icon(icon),
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
+          labelText: hintText,
+          // hintText: hintText,
+          labelStyle:
+              const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -60,9 +63,10 @@ class TextFieldInSign extends StatelessWidget {
       obscureText: isPass,
       controller: textEditingController,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          labelText: hintText,
+          labelStyle:
+              const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -73,6 +77,44 @@ class TextFieldInSign extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
+              borderSide:
+                  BorderSide(color: const Color.fromARGB(255, 0, 127, 85)))),
+    );
+  }
+}
+
+class TextFieldSearch extends StatelessWidget {
+  final TextEditingController textEditingController;
+  final String hintText;
+  final VoidCallback? onSearchPressed;
+
+  const TextFieldSearch({
+    super.key,
+    required this.textEditingController,
+    required this.hintText,
+    this.onSearchPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return TextField(
+      textAlign: TextAlign.left,
+      controller: textEditingController,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+          hintText: hintText,
+          hintStyle: const TextStyle(color: Color.fromARGB(255, 118, 118, 118)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide:
+                BorderSide(color: const Color.fromARGB(255, 170, 170, 170)),
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(100),
               borderSide:
                   BorderSide(color: const Color.fromARGB(255, 0, 127, 85)))),
     );

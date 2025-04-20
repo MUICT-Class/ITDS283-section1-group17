@@ -1,6 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projectphrase2/models/user_model.dart';
 import 'package:projectphrase2/pages/login_page.dart';
+import 'package:projectphrase2/services/auth_service.dart';
 import 'package:projectphrase2/widgets/fieldinput.dart';
+import '../services/auth_layout.dart';
+import 'package:projectphrase2/services/database_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,8 +16,93 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController EmailController = TextEditingController();
-  final TextEditingController PasswordController = TextEditingController();
+  final TextEditingController controllerEmail = TextEditingController();
+  final TextEditingController controllerPassword = TextEditingController();
+  final TextEditingController controllerUsername = TextEditingController();
+  final TextEditingController controllerMobile = TextEditingController();
+  String errorMessage = '';
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controllerEmail.dispose();
+    controllerPassword.dispose();
+    controllerUsername.dispose();
+    controllerMobile.dispose();
+    super.dispose();
+  }
+
+  String? validatePhoneNumber(String value) {
+    //Regular Expression for check mobile number
+    final phoneRegExp = RegExp(r'^[0-9]{10}$');
+    if (!phoneRegExp.hasMatch(value)) {
+      return 'Phone number must be 10 digits';
+    }
+    return null;
+  }
+
+  // String? validateMuictEmail(String value) {
+  //   final muictEmailRegExp =
+  //       RegExp(r'^[a-zA-Z0-9._%+-]+@student\.mahidol\.edu$');
+  //   if (!muictEmailRegExp.hasMatch(value)) {
+  //     return 'Email must be a valid student.mahidol.edu address';
+  //   }
+  //   return null;
+  // }
+
+  void register() async {
+    try {
+      // final email = controllerEmail.text;
+      // String? emailValidation = validateMuictEmail(email);
+      // if (emailValidation != null) {
+      //   setState(() {
+      //     errorMessage = emailValidation;
+      //   });
+      //   return;
+      // }
+
+      final phoneNumber = controllerMobile.text;
+
+      // check mobile
+      String? phoneValidation = validatePhoneNumber(phoneNumber);
+      if (phoneValidation != null) {
+        setState(() {
+          errorMessage = phoneValidation;
+        });
+        return;
+      }
+
+      final res = await authService.value.createAccount(
+        email: controllerEmail.text,
+        password: controllerPassword.text,
+      );
+      final uid = res.user?.uid;
+
+      // store user data to Firestore
+      if (uid != null) {
+        final user = UserModel(
+          uid: uid,
+          email: controllerEmail.text,
+          name: controllerUsername.text,
+          mobile: controllerMobile.text,
+        );
+
+        await DatabaseService().saveUser(user.toMap());
+      }
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthLayout()),
+        (route) => false,
+      );
+      setState(() {
+        errorMessage = '';
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message ?? 'There is an error';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 100,
+                height: 80,
               ),
               const Text(
                 "Register",
@@ -34,26 +125,40 @@ class _RegisterPageState extends State<RegisterPage> {
                 "create your account",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 50),
               TextFieldInSign(
-                  textEditingController: EmailController, hintText: 'Username'),
+                textEditingController: controllerUsername,
+                hintText: 'Username',
+              ),
               const SizedBox(height: 15),
               TextFieldInSign(
-                  textEditingController: EmailController, hintText: 'Email'),
+                textEditingController: controllerEmail,
+                hintText: 'Email',
+              ),
               const SizedBox(height: 15),
               TextFieldInSign(
-                  textEditingController: PasswordController,
+                  textEditingController: controllerMobile, hintText: 'Mobile'),
+              const SizedBox(height: 15),
+              TextFieldInSign(
+                  textEditingController: controllerPassword,
                   hintText: 'Password'),
+              const SizedBox(
+                height: 15,
+              ),
+              Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(color: Colors.redAccent),
+                  )),
               const SizedBox(height: 15),
-              TextFieldInSign(
-                  textEditingController: PasswordController,
-                  hintText: 'Confirm Password'),
-              const SizedBox(height: 60),
               SizedBox(
                 width: double.infinity,
-                height: 70,
+                height: 60,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    register();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(178, 0, 127, 85),
                     shape: RoundedRectangleBorder(
@@ -76,9 +181,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     },
                     child: const Text(
-                      "Login",
-                      style: TextStyle(
-                          color: const Color.fromARGB(255, 0, 127, 85)),
+                      " Login",
+                      style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
                     ),
                   ),
                 ],
