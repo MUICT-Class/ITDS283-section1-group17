@@ -61,6 +61,8 @@ class ChatHistoryState extends State<ChatHistory> {
           }
 
           final entries = data.entries.toList();
+          entries.sort((a, b) =>
+              (b.value['timestamp'] ?? 0).compareTo(a.value['timestamp'] ?? 0));
 
           return ListView.builder(
             itemCount: entries.length,
@@ -68,6 +70,13 @@ class ChatHistoryState extends State<ChatHistory> {
               final chatPartnerId = entries[index].key;
               final lastMessage = entries[index].value['lastMessage'] ?? '';
               final timestamp = entries[index].value['timestamp'] ?? 0;
+              final senderId = entries[index].value['senderId'] ?? '';
+              final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+              final senderName = senderId == currentUserId
+                  ? 'You'
+                  : entries[index].value['senderName'] ?? '';
+
+              print(senderName);
 
               fetchUserData(chatPartnerId);
               final userData = userDataMap[chatPartnerId];
@@ -106,9 +115,10 @@ class ChatHistoryState extends State<ChatHistory> {
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                   subtitle: Text(
-                    lastMessage,
+                    '${senderName}: ${lastMessage}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 16),
                   ),
                   onTap: () {
                     Navigator.push(

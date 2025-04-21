@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       title: 'Album CRUD Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'Inter',
+        fontFamily: 'Plex',
       ),
       home: AuthLayout(),
       // home: Displayproduct(product: demoProduct),

@@ -257,21 +257,54 @@ class _AdditemState extends State<Additem> {
                             Navigator.pop(context);
                             _pickImageFromCamera();
                           },
-                          child: Text('📷 Camera'),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/camera_icon.svg',
+                                color: Color.fromARGB(255, 74, 74, 74),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(' Camera'),
+                            ],
+                          ),
                         ),
                         SimpleDialogOption(
                           onPressed: () {
                             Navigator.pop(context);
                             _pickImageFromGallery();
                           },
-                          child: Text('🖼️ Gallery'),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/photo_icon.svg',
+                                color: Color.fromARGB(255, 74, 74, 74),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(' Photo'),
+                            ],
+                          ),
                         ),
                         SimpleDialogOption(
                           onPressed: () {
                             Navigator.pop(context);
                             _showUrlInputDialog();
                           },
-                          child: Text('🔗 image link'),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/file_icon.svg',
+                                color: Color.fromARGB(255, 74, 74, 74),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(' Link'),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -301,7 +334,7 @@ class _AdditemState extends State<Additem> {
               labelname: "Product Name",
               controller: nameController,
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 0),
             InputBox(
               inputname: "Price",
               labelname: "THB",
@@ -384,8 +417,7 @@ class InputBox extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
-                borderSide:
-                    BorderSide(color: const Color.fromARGB(255, 0, 127, 85)),
+                borderSide: BorderSide(color: Color(0xFF389B72)),
               ),
             ),
           ),

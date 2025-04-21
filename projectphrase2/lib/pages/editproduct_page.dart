@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projectphrase2/models/product_model.dart'; // Assuming you have a ProductModel
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -199,14 +200,36 @@ class _EditProductPageState extends State<EditProductPage> {
                             Navigator.pop(context);
                             _pickImageFromCamera();
                           },
-                          child: Text('📷 Camera'),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/camera_icon.svg',
+                                color: Color.fromARGB(255, 74, 74, 74),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(' Camera'),
+                            ],
+                          ),
                         ),
                         SimpleDialogOption(
                           onPressed: () {
                             Navigator.pop(context);
                             _pickImageFromGallery();
                           },
-                          child: Text('🖼️ Gallery'),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/photo_icon.svg',
+                                color: Color.fromARGB(255, 74, 74, 74),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(' Photo'),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -314,8 +337,7 @@ class InputBox extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
-                borderSide:
-                    BorderSide(color: const Color.fromARGB(255, 0, 127, 85)),
+                borderSide: BorderSide(color: Color(0xFF389B72)),
               ),
             ),
           ),

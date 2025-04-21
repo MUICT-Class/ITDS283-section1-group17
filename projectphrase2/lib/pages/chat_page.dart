@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -41,17 +42,30 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  Future<String> _getUserNameById(String userId) async {
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    if (doc.exists) {
+      return doc.data()?['name'] ?? 'Unknown';
+    }
+    return 'Unknown';
+  }
+
   Future<void> _pickAndUploadImage() async {
     final picker = ImagePicker();
 
     showModalBottomSheet(
+      backgroundColor: Colors.white,
       context: context,
       builder: (context) {
         return SafeArea(
           child: Wrap(
             children: [
               ListTile(
-                leading: Icon(Icons.photo_camera),
+                leading: SvgPicture.asset(
+                  'assets/icons/camera_icon.svg',
+                  color: Color(0xFF389B72),
+                ),
                 title: Text('Take Photo'),
                 onTap: () async {
                   Navigator.of(context).pop();
@@ -63,7 +77,10 @@ class _ChatPageState extends State<ChatPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_library),
+                leading: SvgPicture.asset(
+                  'assets/icons/photo_icon.svg',
+                  color: Color(0xFF389B72),
+                ),
                 title: Text('Choose from Gallery'),
                 onTap: () async {
                   Navigator.of(context).pop();
@@ -91,11 +108,13 @@ class _ChatPageState extends State<ChatPage> {
     await storageRef.putFile(file);
     final imageUrl = await storageRef.getDownloadURL();
 
+    final senderName = await _getUserNameById(senderId);
     final message = {
       'text': '',
       'imageUrl': imageUrl,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'sender': senderId,
+      'senderName': senderName,
       'receiver': widget.receiverId,
     };
 
@@ -108,6 +127,8 @@ class _ChatPageState extends State<ChatPage> {
     final chatSummary = {
       'lastMessage': '[Image]',
       'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'senderId': senderId,
+      'senderName': senderName,
     };
 
     FirebaseDatabase.instance
@@ -118,20 +139,21 @@ class _ChatPageState extends State<ChatPage> {
         .set(chatSummary);
   }
 
-  void _sendMessage() {
+  void _sendMessage() async {
     final text = messageController.text.trim();
     if (text.isNotEmpty) {
+      final senderName = await _getUserNameById(senderId);
       final message = {
         'text': text,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'sender': senderId,
+        'senderName': senderName,
         'receiver': widget.receiverId,
       };
 
-      // Save message in sender's path
-      messageRef.push().set(message);
+      final messageId = messageRef.push().key;
+      messageRef.child(messageId!).set(message);
 
-      // Save message in receiver's path
       FirebaseDatabase.instance
           .ref("messages/${widget.receiverId}/$senderId")
           .push()
@@ -139,7 +161,10 @@ class _ChatPageState extends State<ChatPage> {
 
       final chatSummary = {
         'lastMessage': text,
+        'lastMessageId': messageId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'senderId': senderId,
+        'senderName': senderName,
       };
 
       FirebaseDatabase.instance
@@ -179,7 +204,10 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Text(
                   receiverData?['name'] ?? "Chat",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -203,6 +231,7 @@ class _ChatPageState extends State<ChatPage> {
                       'text': value['text'] ?? '',
                       'timestamp': value['timestamp'] ?? 0,
                       'sender': value['sender'] ?? '',
+                      'senderName': value['senderName'] ?? '',
                       'imageUrl': value['imageUrl'],
                     };
                   }).toList();
@@ -233,8 +262,8 @@ class _ChatPageState extends State<ChatPage> {
                                 ),
                               )
                             : Container(
-                                margin: EdgeInsets.only(bottom: 20),
-                                padding: EdgeInsets.all(16),
+                                margin: EdgeInsets.only(bottom: 12),
+                                padding: EdgeInsets.all(12),
                                 constraints: BoxConstraints(
                                   maxWidth:
                                       MediaQuery.of(context).size.width * 0.7,
@@ -247,7 +276,7 @@ class _ChatPageState extends State<ChatPage> {
                                 ),
                                 child: Text(
                                   message['text'],
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                               ),
                       );

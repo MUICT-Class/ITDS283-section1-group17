@@ -38,8 +38,7 @@ class TextFieldInLog extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide:
-                  BorderSide(color: const Color.fromARGB(255, 0, 127, 85)))),
+              borderSide: BorderSide(color: Color(0xFF389B72)))),
     );
   }
 }
@@ -77,8 +76,7 @@ class TextFieldInSign extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide:
-                  BorderSide(color: const Color.fromARGB(255, 0, 127, 85)))),
+              borderSide: BorderSide(color: Color(0xFF389B72)))),
     );
   }
 }
@@ -115,8 +113,7 @@ class TextFieldSearch extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(100),
-              borderSide:
-                  BorderSide(color: const Color.fromARGB(255, 0, 127, 85)))),
+              borderSide: BorderSide(color: Color(0xFF389B72)))),
     );
   }
 }

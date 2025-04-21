@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: const EdgeInsets.all(25.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {},
                     child: const Text(
                       "Forgot password?",
-                      style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
+                      style: TextStyle(color: Color(0xFF389B72)),
                     ),
                   ),
                 ),
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                       signIn();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(178, 0, 127, 85),
+                      backgroundColor: Color(0xFF389B72),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(360)),
                     ),
@@ -136,8 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: const Text(
                         "Sign up",
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
+                        style: TextStyle(color: Color(0xFF389B72)),
                       ),
                     ),
                   ],

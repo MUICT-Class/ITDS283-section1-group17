@@ -108,86 +108,94 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Padding(
-          padding: (const EdgeInsets.all(30.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 80,
-              ),
-              const Text(
-                "Register",
-                style: TextStyle(fontSize: 56, fontWeight: FontWeight.w500),
-              ),
-              const Text(
-                "create your account",
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              const SizedBox(height: 50),
-              TextFieldInSign(
-                textEditingController: controllerUsername,
-                hintText: 'Username',
-              ),
-              const SizedBox(height: 15),
-              TextFieldInSign(
-                textEditingController: controllerEmail,
-                hintText: 'Email',
-              ),
-              const SizedBox(height: 15),
-              TextFieldInSign(
-                  textEditingController: controllerMobile, hintText: 'Mobile'),
-              const SizedBox(height: 15),
-              TextFieldInSign(
-                  textEditingController: controllerPassword,
-                  hintText: 'Password'),
-              const SizedBox(
-                height: 15,
-              ),
-              Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    errorMessage,
-                    style: TextStyle(color: Colors.redAccent),
-                  )),
-              const SizedBox(height: 15),
-              SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: ElevatedButton(
-                  onPressed: () {
-                    register();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(178, 0, 127, 85),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(360)),
-                  ),
-                  child: const Text(
-                    "Register",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
+          padding: (const EdgeInsets.all(25.0)),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 80,
                 ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Already have an account?"),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                const Text(
+                  "Register",
+                  style: TextStyle(fontSize: 56, fontWeight: FontWeight.w500),
+                ),
+                const Text(
+                  "create your account",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                const SizedBox(height: 50),
+                TextFieldInSign(
+                  textEditingController: controllerUsername,
+                  hintText: 'Username',
+                ),
+                const SizedBox(height: 15),
+                TextFieldInSign(
+                  textEditingController: controllerEmail,
+                  hintText: 'Email',
+                ),
+                const SizedBox(height: 15),
+                TextFieldInSign(
+                    textEditingController: controllerMobile,
+                    hintText: 'Mobile'),
+                const SizedBox(height: 15),
+                TextFieldInSign(
+                    textEditingController: controllerPassword,
+                    hintText: 'Password'),
+                const SizedBox(
+                  height: 15,
+                ),
+                Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      errorMessage,
+                      style: TextStyle(color: Colors.redAccent),
+                    )),
+                const SizedBox(height: 15),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      register();
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF389B72),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(360)),
+                    ),
                     child: const Text(
-                      " Login",
-                      style: TextStyle(color: Color.fromARGB(255, 0, 127, 85)),
+                      "Register",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already have an account?"),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      },
+                      child: const Text(
+                        " Login",
+                        style: TextStyle(color: Color(0xFF389B72)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
