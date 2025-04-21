@@ -71,17 +71,21 @@ class _FavItemState extends State<FavItem> {
             return Center(child: Text("No favorites found."));
           }
 
-          return GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 0,
-            crossAxisSpacing: 20,
-            childAspectRatio: 0.6,
-            padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
-            children: products
-                .map((product) => ProductDisplay(product: product))
-                .toList(),
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
+              child: GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
+                childAspectRatio: 0.6,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: products
+                    .map((product) => ProductDisplay(product: product))
+                    .toList(),
+              ),
+            ),
           );
         },
       ),
